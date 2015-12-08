@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">List</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_task_menu">TaskMenu</string>
+    <string name="doneButton">Done</string>
+    <string name="title">Title</string>
+    <string name="location">Location</string>
+    <string name="notes">Notes</string>
+    <string name="noTitleError">Title can\&apos;t be left empty</string>
+    <string name="dateAndTime">Date and Time</string>
+    <string name="taskAdded">Task Added</string>
+    <string name="taskNotAdded">Task Not Added</string>
+    <string name="newReminderTitle">New Reminder</string>
+    <string name="newTaskTitle">New Task</string>
+    <string name="allDay">All day</string>
+    <string name="today">Today</string>
+    <string name="todo">To Do</string>
+    <string name= "weekOf">Week Of</string>
+    <string name="drawer_header_text">Menu</string>
+</resources>
