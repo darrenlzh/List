@@ -31,8 +31,8 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
 //        setSupportActionBar(toolbar);
 //        setTitle(R.string.newReminderTitle);
 
-        ImageView backButton = (ImageView) toolbar.findViewById(R.id.task_back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setResult(Activity.RESULT_CANCELED, new Intent());
