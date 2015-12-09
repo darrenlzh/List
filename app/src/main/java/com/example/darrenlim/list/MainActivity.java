@@ -1,6 +1,9 @@
 package com.example.darrenlim.list;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
@@ -17,6 +20,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +28,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -383,5 +388,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //collapsingToolbarLayout.setCollapsedTitleTextColor(0xED1C24);
             //collapsingToolbarLayout.setExpandedTitleColor(0xED1C24);
         }
+    }
+    public void drawerButton(View v) {
+        Button b = (Button)v;
+        AlertDialog.Builder d = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view;
+        if(b.getText().equals("LOG IN")) {
+            view = inflater.inflate(R.layout.log_layout, null);
+        }
+        else {
+            view = inflater.inflate(R.layout.sign_layout, null);
+        }
+        d.setView(view);
+        d.show();
+
     }
 }
