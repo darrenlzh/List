@@ -14,12 +14,6 @@
             android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/ic_arrow_back_white_24dp"-->
-                <!--android:id="@+id/task_back_button"/>-->
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         _rAdapter = new ReminderAdapter(MainActivity.this, _data);
-        _recyclerView.setAdapter(_rAdapter);
+//        _recyclerView.setAdapter(_rAdapter);
 
         _fab = (FloatingActionButton) findViewById(R.id.fab);
         _fab1 = (FloatingActionButton) findViewById(R.id.fab1);
@@ -172,6 +172,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         _recyclerView.addOnItemTouchListener(swipeTouchListener);
     }
 
+    @Override public void onEnterAnimationComplete() {
+        super.onEnterAnimationComplete();
+//        setRecyclerAdapter(_recyclerView);
+//        _rAdapter.notifyDataSetChanged();
+        _recyclerView.setAdapter(_rAdapter);
+        _recyclerView.scheduleLayoutAnimation();
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -190,22 +198,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
-//
-//    public void animateFAB1() {
-//        _fab1.startAnimation(_fabOpenMore);
-//        _fab.startAnimation(_rotateBackward);
-//        _fab2.startAnimation(_fabClose);
-//        _fab1.setVisibility(View.INVISIBLE);
-//        _isFabOpen = false;
-//    }
-//
-//    public void animateFAB2() {
-//        _fab2.startAnimation(_fabOpenMore);
-//        _fab.startAnimation(_rotateBackward);
-//        _fab1.startAnimation(_fabClose);
-//        _fab2.setVisibility(View.INVISIBLE);
-//        _isFabOpen = false;
-//    }
 
     public void animateFAB() {
         if (_isFabOpen) {
@@ -248,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         _data.add(reminder);
                         _rAdapter.updateAdapter(_data);
                         _rAdapter.notifyDataSetChanged();
-                        _recyclerView.setAdapter(_rAdapter);
+//                        _recyclerView.setAdapter(_rAdapter);
 
 //                        System.out.println(_data.size());
                     }
