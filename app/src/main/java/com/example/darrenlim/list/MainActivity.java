@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        reminderObj.saveEventually();
 
         _recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-//        _recyclerView.setItemAnimator(new FadeInAnimator());
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -151,33 +150,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    _data.remove(position);
                                     deleteItemFromCloud(position);
+                                    _data.remove(position);
                                     _rAdapter.notifyItemRemoved(position);
                                 }
-                                _rAdapter.notifyDataSetChanged();
+//                                _rAdapter.notifyDataSetChanged();
                             }
 
                             @Override
                             public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                System.out.println(_data.size());
                                 for (int position : reverseSortedPositions) {
-                                    _data.remove(position);
                                     deleteItemFromCloud(position);
+                                    _data.remove(position);
                                     _rAdapter.notifyItemRemoved(position);
                                 }
-                                _rAdapter.notifyDataSetChanged();
+//                                _rAdapter.notifyDataSetChanged();
                             }
                         });
 
         _recyclerView.addOnItemTouchListener(swipeTouchListener);
-    }
-
-    @Override public void onEnterAnimationComplete() {
-        super.onEnterAnimationComplete();
-//        setRecyclerAdapter(_recyclerView);
-//        _rAdapter.notifyDataSetChanged();
-        _recyclerView.setAdapter(_rAdapter);
-        _recyclerView.scheduleLayoutAnimation();
     }
 
     @Override
@@ -239,8 +231,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Reminder reminder = new Reminder(id, title, notes, label, priority, remindOnDay, remindAtLoc, date, time);
                         _data.add(reminder);
                         _rAdapter.updateAdapter(_data);
-                        _rAdapter.notifyDataSetChanged();
-//                        _recyclerView.setAdapter(_rAdapter);
+//                        _rAdapter.notifyDataSetChanged();
+                        _recyclerView.setAdapter(_rAdapter);
 
 //                        System.out.println(_data.size());
                     }
