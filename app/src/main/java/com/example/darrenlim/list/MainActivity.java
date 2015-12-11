@@ -2,6 +2,7 @@ package com.example.darrenlim.list;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -147,6 +148,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             view = inflater.inflate(R.layout.log_layout, null);
             AlertDialog.Builder d = new AlertDialog.Builder(this);
             _dialog = d.create();
+            _dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
             _dialogView = view;
             _dialog.setView(view);
             _dialog.show();
@@ -184,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         _recyclerView.addOnItemTouchListener(swipeTouchListener);
     }
-
 
     @Override
     public void onClick(View v) {
@@ -323,6 +330,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             _toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(_currentUser == null) {
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+                        return;
+                    }
                     _drawerLayout.openDrawer(GravityCompat.START);
                     TextView text = (TextView) findViewById(R.id.user);
                     text.setText(_currentUser.getString("Name"));
