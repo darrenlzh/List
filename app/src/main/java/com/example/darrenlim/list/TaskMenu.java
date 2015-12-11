@@ -33,7 +33,7 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_task_menu);
 
         setUpToolbar();
-        setupCollapsingToolbarLayout();
+//        setupCollapsingToolbarLayout();
 
     }
 
