@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerView _recyclerView;
     private ReminderAdapter _rAdapter;
 
-    private static ArrayList<Reminder> _data = new ArrayList<>();
+    protected static ArrayList<Reminder> _data = new ArrayList<>();
     protected static Calendar _calendar = Calendar.getInstance();
     String _dayOfWeek, _dayOfMonth;
 
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void getData() {
         _data.clear();
         ParseQuery<Reminder> query = ParseQuery.getQuery(Reminder.class);
-        query.whereEqualTo("user",_currentUser.getUsername());
+        query.whereEqualTo("user", _currentUser.getUsername());
         query.orderByDescending("updatedAt");
         query.findInBackground(new FindCallback<Reminder>() {
             @Override
@@ -273,7 +273,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
 //                SystemClock.sleep(2000);
-                getData();
+//                getData();
+//                Intent intent = getIntent();
+//                Reminder reminder = (Reminder) intent.getSerializableExtra("Reminder");
+//                _data.add(reminder);
+
+                _rAdapter.updateAdapter(_data);
+                _rAdapter.notifyItemInserted(0);
+                _recyclerView.smoothScrollToPosition(0);
+//                _recyclerView.setAdapter(_rAdapter);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result

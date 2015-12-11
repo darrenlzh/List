@@ -3,12 +3,14 @@ package com.example.darrenlim.list;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
+import java.io.Serializable;
+
 /**
  * Created by darrenlim on 12/2/15.
  */
 
     @ParseClassName("ReminderObj")
-public class Reminder extends ParseObject{
+public class Reminder extends ParseObject implements Serializable{
 
     public Reminder() {
 

@@ -73,7 +73,8 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
 ////        reminderObj.put("date", 151206);
 ////        reminderObj.put("time", 900);
         reminder.saveInBackground();
-        setResult(Activity.RESULT_OK, new Intent());
+        MainActivity._data.add(0, reminder);
+        setResult(MainActivity.RESULT_OK, new Intent());
         finish();
     }
 
