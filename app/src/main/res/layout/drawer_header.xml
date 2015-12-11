@@ -1,7 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/drawerFrame">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,4 +39,15 @@
         android:id="@+id/logDrawer"
         android:onClick="drawerButton"
         android:layout_gravity="center_horizontal|top" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LOG OUT"
+        android:layout_marginTop="20dp"
+        android:id="@+id/logoutDrawer"
+        android:onClick="drawerButton"
+        android:layout_gravity="right|top"
+        android:visibility="gone"/>
 </FrameLayout>

@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 /**
  * Created by darrenlim on 12/1/15.
@@ -57,6 +59,7 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
         ParseObject reminderObj = new ParseObject("ReminderObj");
         reminderObj.put("title", title);
         reminderObj.put("notes", notes);
+        reminderObj.put("user", ParseUser.getCurrentUser().getUsername());
 //        reminderObj.put("label", "Payment");
 //        reminderObj.put("priority", 0);
 //        reminderObj.put("remindOnDay", true);
