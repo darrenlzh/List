@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -394,17 +395,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Toast.makeText(getApplicationContext(), "Sign Up Successful", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Sign Up Successful, Logging In", Toast.LENGTH_LONG).show();
                 } else {
-                    System.out.println("NOPE");
+                    System.out.println("ERROR");
                 }
             }
         });
-        _dialog.dismiss();
-        _dialog = null;
-        _dialogView = null;
-
-
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                _currentUser = user;
+                _dialog.dismiss();
+                _dialog = null;
+                _dialogView = null;
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
     }
 
     public void log_in(View v){
