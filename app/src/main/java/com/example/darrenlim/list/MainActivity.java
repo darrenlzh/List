@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        reminderObj.saveEventually();
 
         _recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-//        _recyclerView.setItemAnimator(new FadeInAnimator());
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -127,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         _rAdapter = new ReminderAdapter(MainActivity.this, _data);
-        _recyclerView.setAdapter(_rAdapter);
+//        _recyclerView.setAdapter(_rAdapter);
 
         _fab = (FloatingActionButton) findViewById(R.id.fab);
         _fab1 = (FloatingActionButton) findViewById(R.id.fab1);
@@ -156,21 +155,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    _data.remove(position);
                                     deleteItemFromCloud(position);
+                                    _data.remove(position);
                                     _rAdapter.notifyItemRemoved(position);
                                 }
-                                _rAdapter.notifyDataSetChanged();
+//                                _rAdapter.notifyDataSetChanged();
                             }
 
                             @Override
                             public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                System.out.println(_data.size());
                                 for (int position : reverseSortedPositions) {
-                                    _data.remove(position);
                                     deleteItemFromCloud(position);
+                                    _data.remove(position);
                                     _rAdapter.notifyItemRemoved(position);
                                 }
-                                _rAdapter.notifyDataSetChanged();
+//                                _rAdapter.notifyDataSetChanged();
                             }
                         });
 
@@ -195,22 +195,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
-//
-//    public void animateFAB1() {
-//        _fab1.startAnimation(_fabOpenMore);
-//        _fab.startAnimation(_rotateBackward);
-//        _fab2.startAnimation(_fabClose);
-//        _fab1.setVisibility(View.INVISIBLE);
-//        _isFabOpen = false;
-//    }
-//
-//    public void animateFAB2() {
-//        _fab2.startAnimation(_fabOpenMore);
-//        _fab.startAnimation(_rotateBackward);
-//        _fab1.startAnimation(_fabClose);
-//        _fab2.setVisibility(View.INVISIBLE);
-//        _isFabOpen = false;
-//    }
 
     public void animateFAB() {
         if (_isFabOpen) {
@@ -252,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Reminder reminder = new Reminder(id, title, notes, label, priority, remindOnDay, remindAtLoc, date, time);
                         _data.add(reminder);
                         _rAdapter.updateAdapter(_data);
-                        _rAdapter.notifyDataSetChanged();
+//                        _rAdapter.notifyDataSetChanged();
                         _recyclerView.setAdapter(_rAdapter);
 
 //                        System.out.println(_data.size());
