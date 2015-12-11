@@ -17,6 +17,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,17 +29,22 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseAnonymousUtils;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,7 +53,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private android.support.v7.widget.Toolbar _toolbar;
     private DrawerLayout _drawerLayout;
@@ -64,14 +69,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FloatingActionButton _fab, _fab1, _fab2;
     private Animation _fabOpen, _fabClose, _rotateForward, _rotateBackward, _fabGrow;
 
-    private ViewPager mViewPager;
-    public DayView _dayView;
-    public WeekView _weekView;
-    public MonthView _monthView;
-
     private AlertDialog _dialog;
     private View _dialogView;
     static public ParseUser _currentUser;
+    static private boolean _reset = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,19 +86,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setUpNavDrawer();
 
         // Enable Local Datastore.
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, "0BC99FjSMdD9UhB5ipsBEey5iSx85hSgb1zRK7l5", "gkZPUEo70rXQCKyjscI0Q4FDJvRHERzY78Kr8fiS");
-
-//        ParseObject reminderObj = new ParseObject("ReminderObj");
-//        reminderObj.put("title", "Pay phone bill by Dec 6");
-////        reminderObj.put("notes", "Write some notes to elaborate...");
-//        reminderObj.put("label", "Payment");
-//        reminderObj.put("priority", 1);
-//        reminderObj.put("remindOnDay", true);
-//        reminderObj.put("remindAtLocation", false);
-//        reminderObj.put("date", 151206);
-////        reminderObj.put("time", 900);
-//        reminderObj.saveEventually();
+        if(_reset) {
+            Parse.enableLocalDatastore(this);
+            Parse.initialize(this, "0BC99FjSMdD9UhB5ipsBEey5iSx85hSgb1zRK7l5", "gkZPUEo70rXQCKyjscI0Q4FDJvRHERzY78Kr8fiS");
+            _reset = false;
+        }
 
         _recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -143,7 +136,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         _fab1.setOnClickListener(this);
         _fab2.setOnClickListener(this);
 
-        getData();
+        _currentUser = ParseUser.getCurrentUser();
+        if(_currentUser!= null) {
+            getData();
+        }
 
         SwipeableRecyclerViewTouchListener swipeTouchListener =
                 new SwipeableRecyclerViewTouchListener(_recyclerView,
@@ -177,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         _recyclerView.addOnItemTouchListener(swipeTouchListener);
     }
+
 
     @Override
     public void onClick(View v) {
@@ -219,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void getData() {
         _data.clear();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ReminderObj");
+        query.whereEqualTo("user",_currentUser.getUsername());
         query.orderByDescending("updatedAt");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -246,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
     }
 
     public void deleteItemFromCloud(int position) {
@@ -273,53 +272,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }//onActivityResult
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-
-                case 0:
-                    if(_dayView == null) {
-                        return _dayView = new DayView();
-                    }
-                    else { return _dayView; }
-                case 1:
-                    if(_weekView == null) {
-                        return _weekView = new WeekView();
-                    }
-                    else { return _weekView; }
-                case 2:
-                    if(_monthView == null) {
-                        return _monthView = new MonthView();
-                    }
-                    else { return _monthView; }
-            }
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Today";
-                case 1:
-                    return "This Week";
-                case 2:
-                    return "Monthly";
-            }
-            return null;
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -361,6 +313,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(View v) {
                     _drawerLayout.openDrawer(GravityCompat.START);
+
+                    if(_currentUser != null) {
+                        TextView text = (TextView) findViewById(R.id.user);
+                        text.setText(_currentUser.getString("Name"));
+                        Button b = (Button) findViewById(R.id.signDrawer);
+                        b.setVisibility(View.GONE);
+                        b = (Button) findViewById(R.id.logDrawer);
+                        b.setVisibility(View.GONE);
+                        b = (Button) findViewById(R.id.logoutDrawer);
+                        b.setVisibility(View.VISIBLE);
+                    }
                 }
             });
         }
@@ -378,23 +341,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void drawerButton(View v) {
         Button b = (Button)v;
-        AlertDialog.Builder d = new AlertDialog.Builder(this);
-        //_dialog = d.create();
-        LayoutInflater inflater = getLayoutInflater();
         View view;
         if(b.getText().equals("LOG IN")) {
+            LayoutInflater inflater = getLayoutInflater();
             view = inflater.inflate(R.layout.log_layout, null);
         }
         else if (b.getText().equals("LOG OUT")) {
-            //LOG OUT
+            ParseUser.logOut();
+            _currentUser = null;
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
             return;
         }
         else {
+            LayoutInflater inflater = getLayoutInflater();
             view = inflater.inflate(R.layout.sign_layout, null);
         }
+        AlertDialog.Builder d = new AlertDialog.Builder(this);
+        _dialog = d.create();
         _dialogView = view;
-        d.setView(view);
-        d.show();
+        _dialog.setView(view);
+        _dialog.show();
 
     }
     public void sign_up(View v){
@@ -422,9 +390,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         user.setUsername(username);
         user.setPassword(password);
         user.put("Name", name);
-        user.signUpInBackground();
-        //_dialog.cancel();
-        //_dialog = null;
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(getApplicationContext(), "Sign Up Successful", Toast.LENGTH_LONG).show();
+                } else {
+                    System.out.println("NOPE");
+                }
+            }
+        });
+        _dialog.dismiss();
+        _dialog = null;
         _dialogView = null;
 
 
@@ -450,12 +427,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void done(ParseUser user, ParseException e) {
                 if(user != null) {
                     _currentUser = user;
-                    //_dialog.cancel();
-                    //_dialog = null;
+                    _dialog.dismiss();
+                    _dialog = null;
                     _dialogView = null;
-                    Toast.makeText(getApplicationContext(), "Logged in", Toast.LENGTH_LONG).show();
-
-
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
                 }
                 else {
                     Toast.makeText(getApplicationContext(), R.string.logInError, Toast.LENGTH_LONG).show();
