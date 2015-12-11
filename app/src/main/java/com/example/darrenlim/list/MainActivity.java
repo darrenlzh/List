@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerView _recyclerView;
     private ReminderAdapter _rAdapter;
 
-    private ArrayList<Reminder> _data = new ArrayList<>();
+    private static ArrayList<Reminder> _data = new ArrayList<>();
     protected static Calendar _calendar = Calendar.getInstance();
     String _dayOfWeek, _dayOfMonth;
 
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Enable Local Datastore.
         if(_reset) {
+            ParseObject.registerSubclass(Reminder.class);
             Parse.enableLocalDatastore(this);
             Parse.initialize(this, "0BC99FjSMdD9UhB5ipsBEey5iSx85hSgb1zRK7l5", "gkZPUEo70rXQCKyjscI0Q4FDJvRHERzY78Kr8fiS");
             _reset = false;
@@ -141,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         _currentUser = ParseUser.getCurrentUser();
         if(_currentUser!= null) {
             getData();
+            SystemClock.sleep(1000);
         }
         else {
             LayoutInflater inflater = getLayoutInflater();
@@ -233,36 +235,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void getData() {
         _data.clear();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ReminderObj");
+        ParseQuery<Reminder> query = ParseQuery.getQuery(Reminder.class);
         query.whereEqualTo("user",_currentUser.getUsername());
         query.orderByDescending("updatedAt");
-        query.findInBackground(new FindCallback<ParseObject>() {
+        query.findInBackground(new FindCallback<Reminder>() {
             @Override
-            public void done(List<ParseObject> reminders, ParseException e) {
+            public void done(List<Reminder> reminders, ParseException e) {
                 if (e == null) {
-                    for (ParseObject item : reminders) {
-                        String id = item.getObjectId();
-                        String title = item.getString("title");
-                        String notes = item.getString("notes");
-                        String label = item.getString("label");
-                        Integer priority = item.getInt("priority");
-                        Boolean remindOnDay = item.getBoolean("remindOnDay");
-                        Boolean remindAtLoc = item.getBoolean("remindAtLoc");
-                        Integer date = item.getInt("date");
-                        Integer time = item.getInt("time");
-                        Reminder reminder = new Reminder(id, title, notes, label, priority, remindOnDay, remindAtLoc, date, time);
-                        _data.add(reminder);
-                        _rAdapter.updateAdapter(_data);
-//                        _rAdapter.notifyDataSetChanged();
-                        _recyclerView.setAdapter(_rAdapter);
-
-//                        System.out.println(_data.size());
+                    for (Reminder r : reminders) {
+                        _data.add(r);
                     }
                 }
-
+                _rAdapter.updateAdapter(_data);
+                _recyclerView.setAdapter(_rAdapter);
             }
+
         });
 
+//        SystemClock.sleep(1000);
     }
 
     public void deleteItemFromCloud(int position) {
@@ -282,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
+//                SystemClock.sleep(2000);
                 getData();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -330,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             _toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(_currentUser == null) {
+                    if (_currentUser == null) {
                         Intent intent = getIntent();
                         finish();
                         startActivity(intent);

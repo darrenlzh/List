@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -56,17 +57,22 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
         text = (EditText) findViewById(R.id.notes);
         notes = text.getText().toString();
 
-        ParseObject reminderObj = new ParseObject("ReminderObj");
-        reminderObj.put("title", title);
-        reminderObj.put("notes", notes);
-        reminderObj.put("user", ParseUser.getCurrentUser().getUsername());
-//        reminderObj.put("label", "Payment");
-//        reminderObj.put("priority", 0);
-//        reminderObj.put("remindOnDay", true);
-//        reminderObj.put("remindAtLocation", false);
-//        reminderObj.put("date", 151206);
-//        reminderObj.put("time", 900);
-        reminderObj.saveInBackground();
+        Reminder reminder = new Reminder();
+        reminder.setTitle(title);
+        reminder.setNotes(notes);
+        reminder.setUser(ParseUser.getCurrentUser().getUsername());
+
+//        ParseObject reminderObj = new ParseObject("ReminderObj");
+//        reminderObj.put("title", title);
+//        reminderObj.put("notes", notes);
+//        reminderObj.put("user", ParseUser.getCurrentUser().getUsername());
+////        reminderObj.put("label", "Payment");
+////        reminderObj.put("priority", 0);
+////        reminderObj.put("remindOnDay", true);
+////        reminderObj.put("remindAtLocation", false);
+////        reminderObj.put("date", 151206);
+////        reminderObj.put("time", 900);
+        reminder.saveInBackground();
         setResult(Activity.RESULT_OK, new Intent());
         finish();
     }
