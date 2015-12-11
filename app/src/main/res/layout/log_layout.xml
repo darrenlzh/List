@@ -5,10 +5,24 @@
     android:id="@+id/logLayout"
     android:padding="50dp">
 
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/logUsernameWidget">
+        android:id="@+id/logNameWidget">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/logName"
+            android:hint="Name"
+            android:visibility="gone"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/logUsernameWidget"
+        android:layout_below="@+id/logNameWidget">
 
         <EditText
             android:layout_width="match_parent"
@@ -30,6 +44,7 @@
             android:inputType="textPassword"
             android:fontFamily="sans-serif"/>
     </android.support.design.widget.TextInputLayout>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,5 +52,14 @@
         android:id="@+id/logButton"
         android:text="LOG IN"
         android:onClick="log_in"
+        android:layout_marginTop="20dp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logPasswordWidget"
+        android:layout_toRightOf="@+id/logButton"
+        android:id="@+id/signButton"
+        android:text="SIGN UP"
+        android:onClick="update"
         android:layout_marginTop="20dp"/>
 </RelativeLayout>

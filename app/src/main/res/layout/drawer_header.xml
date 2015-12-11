@@ -23,31 +23,10 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SIGN UP"
-        android:layout_marginTop="20dp"
-        android:id="@+id/signDrawer"
-        android:onClick="drawerButton"
-        android:layout_gravity="right|top" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="LOG IN"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="20dp"
-        android:id="@+id/logDrawer"
-        android:onClick="drawerButton"
-        android:layout_gravity="center_horizontal|top" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="LOG OUT"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="5dp"
         android:id="@+id/logoutDrawer"
         android:onClick="drawerButton"
-        android:layout_gravity="right|top"
-        android:visibility="gone"/>
+        android:layout_gravity="right|top"/>
 </FrameLayout>

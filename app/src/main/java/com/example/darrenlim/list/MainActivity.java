@@ -141,6 +141,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(_currentUser!= null) {
             getData();
         }
+        else {
+            LayoutInflater inflater = getLayoutInflater();
+            View view;
+            view = inflater.inflate(R.layout.log_layout, null);
+            AlertDialog.Builder d = new AlertDialog.Builder(this);
+            _dialog = d.create();
+            _dialogView = view;
+            _dialog.setView(view);
+            _dialog.show();
+        }
 
         SwipeableRecyclerViewTouchListener swipeTouchListener =
                 new SwipeableRecyclerViewTouchListener(_recyclerView,
@@ -314,17 +324,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(View v) {
                     _drawerLayout.openDrawer(GravityCompat.START);
+                    TextView text = (TextView) findViewById(R.id.user);
+                    text.setText(_currentUser.getString("Name"));
 
-                    if(_currentUser != null) {
-                        TextView text = (TextView) findViewById(R.id.user);
-                        text.setText(_currentUser.getString("Name"));
-                        Button b = (Button) findViewById(R.id.signDrawer);
-                        b.setVisibility(View.GONE);
-                        b = (Button) findViewById(R.id.logDrawer);
-                        b.setVisibility(View.GONE);
-                        b = (Button) findViewById(R.id.logoutDrawer);
-                        b.setVisibility(View.VISIBLE);
-                    }
                 }
             });
         }
@@ -342,38 +344,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void drawerButton(View v) {
         Button b = (Button)v;
-        View view;
-        if(b.getText().equals("LOG IN")) {
-            LayoutInflater inflater = getLayoutInflater();
-            view = inflater.inflate(R.layout.log_layout, null);
-        }
-        else if (b.getText().equals("LOG OUT")) {
+        if (b.getText().equals("LOG OUT")) {
             ParseUser.logOut();
             _currentUser = null;
             Intent intent = getIntent();
             finish();
             startActivity(intent);
-            return;
         }
-        else {
-            LayoutInflater inflater = getLayoutInflater();
-            view = inflater.inflate(R.layout.sign_layout, null);
-        }
-        AlertDialog.Builder d = new AlertDialog.Builder(this);
-        _dialog = d.create();
-        _dialogView = view;
-        _dialog.setView(view);
-        _dialog.show();
-
     }
     public void sign_up(View v){
         String name, username, password;
         EditText et;
-        et = (EditText) _dialogView.findViewById(R.id.signName);
+        et = (EditText) _dialogView.findViewById(R.id.logName);
         name = et.getText().toString();
-        et = (EditText) _dialogView.findViewById(R.id.signUsername);
+        et = (EditText) _dialogView.findViewById(R.id.logUsername);
         username = et.getText().toString();
-        et = (EditText) _dialogView.findViewById(R.id.signPassword);
+        et = (EditText) _dialogView.findViewById(R.id.logPassword);
         password = et.getText().toString();
         if(name.equals("")) {
             Toast.makeText(getApplicationContext(), R.string.noNameError, Toast.LENGTH_LONG).show();
@@ -401,6 +387,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
+
+        SystemClock.sleep(2000);
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
@@ -408,9 +396,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 _dialog.dismiss();
                 _dialog = null;
                 _dialogView = null;
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
             }
         });
     }
@@ -438,16 +423,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     _dialog.dismiss();
                     _dialog = null;
                     _dialogView = null;
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
                 }
                 else {
                     Toast.makeText(getApplicationContext(), R.string.logInError, Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
 
-
+    public void update(View v){
+        EditText et = (EditText) _dialogView.findViewById(R.id.logName);
+        et.setVisibility(View.VISIBLE);
+        Button b = (Button) _dialogView.findViewById(R.id.logButton);
+        b.setVisibility(View.GONE);
+        b = (Button) _dialogView.findViewById(R.id.signButton);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sign_up(v);
+            }
+        });
     }
 }
