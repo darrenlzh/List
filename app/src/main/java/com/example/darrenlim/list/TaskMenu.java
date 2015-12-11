@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -21,24 +23,18 @@ import com.parse.ParseObject;
  */
 public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
 
+    private CollapsingToolbarLayout _collapsingToolbarLayout;
+    private android.support.v7.widget.Toolbar _toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_menu);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        setTitle(R.string.newReminderTitle);
+        setUpToolbar();
+        setupCollapsingToolbarLayout();
 
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(Activity.RESULT_CANCELED, new Intent());
-                finish();
-            }
-        });
     }
 
     @Override
@@ -70,6 +66,33 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
         reminderObj.saveInBackground();
         setResult(Activity.RESULT_OK, new Intent());
         finish();
+    }
+
+    private void setUpToolbar() {
+        _toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (_toolbar != null) {
+            setSupportActionBar(_toolbar);
+            getSupportActionBar().setTitle("New Reminder");
+            _toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+            _toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setResult(Activity.RESULT_CANCELED, new Intent());
+                    finish();
+                }
+            });
+        }
+    }
+
+    private void setupCollapsingToolbarLayout(){
+
+        _collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        if(_collapsingToolbarLayout != null){
+            _collapsingToolbarLayout.setTitle(_toolbar.getTitle());
+            _collapsingToolbarLayout.setCollapsedTitleGravity(Gravity.CENTER_VERTICAL);
+            //collapsingToolbarLayout.setCollapsedTitleTextColor(0xED1C24);
+            //collapsingToolbarLayout.setExpandedTitleColor(0xED1C24);
+        }
     }
 
 }
