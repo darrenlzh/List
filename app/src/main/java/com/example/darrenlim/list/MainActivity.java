@@ -20,6 +20,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -369,6 +370,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         _collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         if(_collapsingToolbarLayout != null){
             _collapsingToolbarLayout.setTitle(_toolbar.getTitle());
+            _collapsingToolbarLayout.setCollapsedTitleGravity(Gravity.CENTER_VERTICAL);
             //collapsingToolbarLayout.setCollapsedTitleTextColor(0xED1C24);
             //collapsingToolbarLayout.setExpandedTitleColor(0xED1C24);
         }
