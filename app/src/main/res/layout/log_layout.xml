@@ -34,5 +34,6 @@
         android:layout_below="@+id/logPasswordWidget"
         android:id="@+id/logButton"
         android:text="LOG IN"
+        android:onClick="log_in"
         android:layout_marginTop="20dp"/>
 </RelativeLayout>

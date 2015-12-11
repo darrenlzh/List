@@ -47,5 +47,6 @@
         android:layout_below="@+id/signPasswordWidget"
         android:id="@+id/signButton"
         android:text="SIGN UP"
+        android:onClick="sign_up"
         android:layout_marginTop="20dp"/>
 </RelativeLayout>

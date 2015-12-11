@@ -7,6 +7,10 @@
     <string name="location">Location</string>
     <string name="notes">Notes</string>
     <string name="noTitleError">Title can\&apos;t be left empty</string>
+    <string name ="noNameError">Name can\&apos;t be left empty</string>
+    <string name ="noUsernameError">Username can\&apos;t be left empty</string>
+    <string name ="noPasswordError">Password can\&apos;t be left empty</string>
+    <string name ="logInError">Log In credentials incorrect</string>
     <string name="dateAndTime">Date and Time</string>
     <string name="taskAdded">Task Added</string>
     <string name="taskNotAdded">Task Not Added</string>

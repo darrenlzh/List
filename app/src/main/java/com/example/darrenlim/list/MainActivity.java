@@ -2,10 +2,7 @@ package com.example.darrenlim.list;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -29,14 +26,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public DayView _dayView;
     public WeekView _weekView;
     public MonthView _monthView;
+
+    private AlertDialog _dialog;
+    private View _dialogView;
+    static public ParseUser _currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -252,8 +257,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //                        System.out.println(_data.size());
                     }
-                } else {
-
                 }
 
             }
@@ -267,8 +270,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     object.deleteInBackground();
-                } else {
-                    // something went wrong
                 }
             }
         });
@@ -362,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         _toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (_toolbar != null) {
             setSupportActionBar(_toolbar);
-            getSupportActionBar().setTitle(_dayOfWeek+" "+_dayOfMonth);
+            getSupportActionBar().setTitle(_dayOfWeek + " " + _dayOfMonth);
         }
     }
 
@@ -392,16 +393,90 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void drawerButton(View v) {
         Button b = (Button)v;
         AlertDialog.Builder d = new AlertDialog.Builder(this);
+        //_dialog = d.create();
         LayoutInflater inflater = getLayoutInflater();
         View view;
         if(b.getText().equals("LOG IN")) {
             view = inflater.inflate(R.layout.log_layout, null);
         }
+        else if (b.getText().equals("LOG OUT")) {
+            //LOG OUT
+            return;
+        }
         else {
             view = inflater.inflate(R.layout.sign_layout, null);
         }
+        _dialogView = view;
         d.setView(view);
         d.show();
+
+    }
+    public void sign_up(View v){
+        String name, username, password;
+        EditText et;
+        et = (EditText) _dialogView.findViewById(R.id.signName);
+        name = et.getText().toString();
+        et = (EditText) _dialogView.findViewById(R.id.signUsername);
+        username = et.getText().toString();
+        et = (EditText) _dialogView.findViewById(R.id.signPassword);
+        password = et.getText().toString();
+        if(name.equals("")) {
+            Toast.makeText(getApplicationContext(), R.string.noNameError, Toast.LENGTH_LONG).show();
+            return;
+        }
+        else if(username.equals("")) {
+            Toast.makeText(getApplicationContext(), R.string.noUsernameError, Toast.LENGTH_LONG).show();
+            return;
+        }
+        else if(password.equals("")){
+            Toast.makeText(getApplicationContext(), R.string.noPasswordError, Toast.LENGTH_LONG).show();
+            return;
+        }
+        ParseUser user = new ParseUser();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.put("Name", name);
+        user.signUpInBackground();
+        //_dialog.cancel();
+        //_dialog = null;
+        _dialogView = null;
+
+
+    }
+
+    public void log_in(View v){
+        String username, password;
+        EditText et;
+        et = (EditText) _dialogView.findViewById(R.id.logUsername);
+        username = et.getText().toString();
+        et = (EditText) _dialogView.findViewById(R.id.logPassword);
+        password = et.getText().toString();
+        if(username.equals("")) {
+            Toast.makeText(getApplicationContext(), R.string.noUsernameError, Toast.LENGTH_LONG).show();
+            return;
+        }
+        else if(password.equals("")){
+            Toast.makeText(getApplicationContext(), R.string.noPasswordError, Toast.LENGTH_LONG).show();
+            return;
+        }
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if(user != null) {
+                    _currentUser = user;
+                    //_dialog.cancel();
+                    //_dialog = null;
+                    _dialogView = null;
+                    Toast.makeText(getApplicationContext(), "Logged in", Toast.LENGTH_LONG).show();
+
+
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), R.string.logInError, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
 
     }
 }
