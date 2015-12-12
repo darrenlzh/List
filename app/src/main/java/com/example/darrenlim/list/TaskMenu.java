@@ -13,10 +13,12 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -38,6 +40,22 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_task_menu);
         setUpToolbar();
 //        setupCollapsingToolbarLayout();
+        Switch sw = (Switch) findViewById(R.id.reminderSwitch);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DatePicker dp = (DatePicker) findViewById(R.id.datePicker);
+                TimePicker tp = (TimePicker) findViewById(R.id.timePicker);
+                if(!isChecked){
+                    dp.setVisibility(View.GONE);
+                    tp.setVisibility(View.GONE);
+                }
+                else {
+                    dp.setVisibility(View.VISIBLE);
+                    tp.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
     }
 
@@ -63,16 +81,6 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
         reminder.setNotes(notes);
         reminder.setUser(ParseUser.getCurrentUser().getUsername());
 
-//        ParseObject reminderObj = new ParseObject("ReminderObj");
-//        reminderObj.put("title", title);
-//        reminderObj.put("notes", notes);
-//        reminderObj.put("user", ParseUser.getCurrentUser().getUsername());
-////        reminderObj.put("label", "Payment");
-////        reminderObj.put("priority", 0);
-////        reminderObj.put("remindOnDay", true);
-////        reminderObj.put("remindAtLocation", false);
-////        reminderObj.put("date", 151206);
-////        reminderObj.put("time", 900);
         reminder.setLocation("University at Buffalo");
         reminder.saveInBackground();
         MainActivity._data.add(0, reminder);
@@ -106,19 +114,4 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
             //collapsingToolbarLayout.setExpandedTitleColor(0xED1C24);
         }
     }
-
-    public void dateTimeAdder(View v){
-        CheckBox cb = (CheckBox)v;
-        DatePicker dp = (DatePicker) findViewById(R.id.datePicker);
-        TimePicker tp = (TimePicker) findViewById(R.id.timePicker);
-        if(!cb.isChecked()){
-            dp.setVisibility(View.GONE);
-            tp.setVisibility(View.GONE);
-        }
-        else {
-            dp.setVisibility(View.VISIBLE);
-            tp.setVisibility(View.VISIBLE);
-        }
-    }
-
 }

@@ -34,12 +34,11 @@
                     android:id="@+id/notes"/>
             </android.support.design.widget.TextInputLayout>
 
-            <CheckBox
+            <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/checkBox"
+                android:id="@+id/reminderSwitch"
                 android:text="@string/checkBox"
-                android:onClick="dateTimeAdder"
                 android:layout_below="@+id/noteWidget"/>
 
 
@@ -48,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/datePicker"
-                android:layout_below="@+id/checkBox"
+                android:layout_below="@+id/reminderSwitch"
                 android:calendarViewShown="false"
                 android:datePickerMode="spinner"
                 android:visibility="gone"/>
