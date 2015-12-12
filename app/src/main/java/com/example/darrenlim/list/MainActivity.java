@@ -4,19 +4,22 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,15 +34,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
-import com.parse.ParseInstallation;
+import com.parse.ParseAnonymousUtils;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -47,12 +46,14 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private android.support.v7.widget.Toolbar _toolbar;
@@ -74,38 +75,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private View _dialogView;
     static public ParseUser _currentUser;
     static private boolean _reset = true;
-    public static GoogleApiClient _googleAPI;
-    public static Location _location;
-
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        System.out.println("CANNOT FIND");
-    }
-
-    @Override
-    public void onConnected(Bundle conn){
-        SystemClock.sleep(5000);
-        _location = LocationServices.FusedLocationApi.getLastLocation(_googleAPI);
-        if(_location == null) {
-            System.out.println("ERRRORRRRRRRRRRRRRRRRR");
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int cause){
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        _googleAPI.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        _googleAPI.disconnect();
-        super.onStop();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,24 +87,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setupCollapsingToolbarLayout();
         setUpNavDrawer();
 
-        _googleAPI = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
 
         // Enable Local Datastore.
         if(_reset) {
             ParseObject.registerSubclass(Reminder.class);
             Parse.enableLocalDatastore(this);
             Parse.initialize(this, "0BC99FjSMdD9UhB5ipsBEey5iSx85hSgb1zRK7l5", "gkZPUEo70rXQCKyjscI0Q4FDJvRHERzY78Kr8fiS");
-            ParseInstallation.getCurrentInstallation().saveInBackground();
             _reset = false;
         }
-//        ParseObject.registerSubclass(Reminder.class);
-//        Parse.enableLocalDatastore(this);
-//        Parse.initialize(this, "0BC99FjSMdD9UhB5ipsBEey5iSx85hSgb1zRK7l5", "gkZPUEo70rXQCKyjscI0Q4FDJvRHERzY78Kr8fiS");
-//        ParseInstallation.getCurrentInstallation().saveInBackground();
 
         _recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -457,14 +416,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             Toast.makeText(getApplicationContext(), R.string.noUsernameError, Toast.LENGTH_LONG).show();
             return;
         }
-        else if(password.equals("")) {
+        else if(password.equals("")){
             Toast.makeText(getApplicationContext(), R.string.noPasswordError, Toast.LENGTH_LONG).show();
             return;
         }
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
-                if (user != null) {
+                if(user != null) {
                     _currentUser = user;
                     _dialog.dismiss();
                     _dialog = null;
