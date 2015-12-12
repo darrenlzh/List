@@ -48,7 +48,6 @@ import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 
 import com.parse.ParseException;
@@ -84,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private View _dialogView;
     static public ParseUser _currentUser;
     static private boolean _reset = true;
-    public GoogleApiClient _googleAPI;
-    public Location _location;
+    public static GoogleApiClient _googleAPI;
+    public static Location _location;
 
 
     @Override
@@ -98,9 +97,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         _location = LocationServices.FusedLocationApi.getLastLocation(_googleAPI);
         if(_location != null){
             System.out.println(String.valueOf(_location.getLatitude()));
-        }
-        else {
-            System.out.println("failed");
         }
     }
 
@@ -243,18 +239,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         });
 
         _recyclerView.addOnItemTouchListener(swipeTouchListener);
-
-//        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-//        installation.put("user",ParseUser.getCurrentUser());
-//        installation.saveInBackground();
-
-        ParseQuery pushQuery = ParseInstallation.getQuery();
-        pushQuery.whereEqualTo("user", ParseUser.getCurrentUser());
-
-        ParsePush push = new ParsePush();
-        push.setQuery(pushQuery);
-        push.setMessage("HELLO! BONJOUR!");
-        push.sendInBackground();
     }
 
     @Override
