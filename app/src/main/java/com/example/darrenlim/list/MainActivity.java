@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
 
     private android.support.v7.widget.Toolbar _toolbar;
@@ -78,26 +78,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public static Location _location;
 
     @Override
-    public void onLocationChanged(Location location) {
-        _location = location;
-    }
-    @Override public void onProviderDisabled(String provider) {}
-    @Override public void onProviderEnabled(String provider) {}
-    @Override public void onStatusChanged(String arg0, int arg1, Bundle arg2) {}
-
-    @Override
     public void onConnectionFailed(ConnectionResult result) {
         System.out.println("CANNOT FIND");
     }
 
     @Override
     public void onConnected(Bundle conn){
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(5000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationServices.FusedLocationApi.requestLocationUpdates(_googleAPI, locationRequest, (com.google.android.gms.location.LocationListener) this);
+        SystemClock.sleep(5000);
         _location = LocationServices.FusedLocationApi.getLastLocation(_googleAPI);
+        if(_location == null) {
+            System.out.println("ERRRORRRRRRRRRRRRRRRRR");
+        }
     }
 
     @Override
