@@ -54,7 +54,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements  View.OnClickListener {
 
 
     private android.support.v7.widget.Toolbar _toolbar;
@@ -76,59 +76,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private View _dialogView;
     static public ParseUser _currentUser;
     static private boolean _reset = true;
-    public static GoogleApiClient _googleAPI;
-    public static Location _location;
-    private LocationManager _locationManager;
 
-    private LocationListener ll = new LocationListener(){
-        public void onLocationChanged(Location location) {
-            _location = location;
-        }
-        public void onProviderDisabled(String provider) {}
-        public void onProviderEnabled(String provider) {}
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
-    };
-
-
-    @Override
-    public void onLocationChanged(Location locFromGps) {
-        _location = locFromGps;
-        System.out.println("new location");
-    }
-    @Override public void onProviderDisabled(String provider) {}
-    @Override public void onProviderEnabled(String provider) {}
-    @Override public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        System.out.println("CANNOT FIND");
-    }
-
-    @Override
-    public void onConnected(Bundle conn){
-        List<String> pro = _locationManager.getProviders(true);
-        for (String a : pro) {
-            System.out.println(pro);
-        }
-        checkCallingPermission("Use GPS?");
-       // _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int cause){
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        _googleAPI.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        _googleAPI.disconnect();
-        super.onStop();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,15 +88,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setUpToolbar();
         setupCollapsingToolbarLayout();
         setUpNavDrawer();
-
-        _googleAPI = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-
-        _locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
 
         // Enable Local Datastore.
         if(_reset) {
@@ -512,5 +451,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 sign_up(v);
             }
         });
+    }
+    public void click2 (View v) {
+
     }
 }

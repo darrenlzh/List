@@ -5,10 +5,6 @@ import com.parse.ParseObject;
 
 import java.io.Serializable;
 
-/**
- * Created by darrenlim on 12/2/15.
- */
-
     @ParseClassName("ReminderObj")
 public class Reminder extends ParseObject implements Serializable{
 
@@ -54,6 +50,9 @@ public class Reminder extends ParseObject implements Serializable{
 
     public void setTime(Integer time) {put("time", time);}
 
+    public void setLocation(String s) {put("location",s);}
+
+    public String getLocation() {return getString("location");}
 
 
 //    public Reminder(String id, String title, String notes, String label, Integer priority, Boolean remindOnDay, Boolean remindOnLoc, Integer date, Integer time) {

@@ -4,6 +4,9 @@
     <string name="title_activity_task_menu">TaskMenu</string>
     <string name="doneButton">Done</string>
     <string name="title">Title</string>
+    <string name="all">All</string>
+    <string name="Daily">Daily</string>
+    <string name="Gym">Gym</string>
     <string name="location">Location</string>
     <string name="notes">Notes</string>
     <string name="noTitleError">Title can\&apos;t be left empty</string>

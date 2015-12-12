@@ -72,6 +72,7 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
 ////        reminderObj.put("remindAtLocation", false);
 ////        reminderObj.put("date", 151206);
 ////        reminderObj.put("time", 900);
+        reminder.setLocation("University at Buffalo");
         reminder.saveInBackground();
         MainActivity._data.add(0, reminder);
         setResult(MainActivity.RESULT_OK, new Intent());
