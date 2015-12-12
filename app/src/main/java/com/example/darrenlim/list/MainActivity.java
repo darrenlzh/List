@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -19,6 +22,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.telecom.ConnectionRequest;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,6 +38,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
@@ -54,7 +61,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,  View.OnClickListener {
 
 
     private android.support.v7.widget.Toolbar _toolbar;
@@ -76,6 +83,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View _dialogView;
     static public ParseUser _currentUser;
     static private boolean _reset = true;
+    public static GoogleApiClient _googleAPI;
+    public static Location _location;
+
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        System.out.println("CANNOT FIND");
+    }
+
+    @Override
+    public void onConnected(Bundle conn){
+        _location = LocationServices.FusedLocationApi.getLastLocation(_googleAPI);
+        if(_location != null){
+            System.out.println(String.valueOf(_location.getLatitude()));
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause){
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        _googleAPI.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        _googleAPI.disconnect();
+        super.onStop();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +127,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setupCollapsingToolbarLayout();
         setUpNavDrawer();
 
+        _googleAPI = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
         // Enable Local Datastore.
         if(_reset) {
