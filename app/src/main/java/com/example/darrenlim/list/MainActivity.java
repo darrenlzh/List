@@ -41,6 +41,7 @@ import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 
 import com.parse.ParseException;
@@ -195,6 +196,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         });
 
         _recyclerView.addOnItemTouchListener(swipeTouchListener);
+
+//        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+//        installation.put("user",ParseUser.getCurrentUser());
+//        installation.saveInBackground();
+
+        ParseQuery pushQuery = ParseInstallation.getQuery();
+        pushQuery.whereEqualTo("user", ParseUser.getCurrentUser());
+
+        ParsePush push = new ParsePush();
+        push.setQuery(pushQuery);
+        push.setMessage("HELLO! BONJOUR!");
+        push.sendInBackground();
     }
 
     @Override
