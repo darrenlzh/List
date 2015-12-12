@@ -12,18 +12,20 @@ import android.transition.Explode;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-/**
- * Created by darrenlim on 12/1/15.
- */
+import java.util.Date;
+
 public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
 
     private CollapsingToolbarLayout _collapsingToolbarLayout;
@@ -34,7 +36,6 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_menu);
-
         setUpToolbar();
 //        setupCollapsingToolbarLayout();
 
@@ -103,6 +104,20 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
             _collapsingToolbarLayout.setCollapsedTitleGravity(Gravity.CENTER_VERTICAL);
             //collapsingToolbarLayout.setCollapsedTitleTextColor(0xED1C24);
             //collapsingToolbarLayout.setExpandedTitleColor(0xED1C24);
+        }
+    }
+
+    public void dateTimeAdder(View v){
+        CheckBox cb = (CheckBox)v;
+        DatePicker dp = (DatePicker) findViewById(R.id.datePicker);
+        TimePicker tp = (TimePicker) findViewById(R.id.timePicker);
+        if(!cb.isChecked()){
+            dp.setVisibility(View.GONE);
+            tp.setVisibility(View.GONE);
+        }
+        else {
+            dp.setVisibility(View.VISIBLE);
+            tp.setVisibility(View.VISIBLE);
         }
     }
 

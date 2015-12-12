@@ -5,52 +5,71 @@
     android:layout_marginTop="@dimen/toolbar_overlay"
     android:padding="@dimen/activity_padding">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/header">
+        android:id="@+id/scrollView">
 
-        <EditText
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/title"
-            android:id="@+id/title"
-            android:textSize="@dimen/title_size"/>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/title">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/notes"
-                android:id="@+id/notes"/>
-        </android.support.design.widget.TextInputLayout>
+                android:hint="@string/title"
+                android:id="@+id/title"
+                android:textSize="@dimen/title_size"/>
 
-    </RelativeLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/header">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/label_field_container">
-
-            <TableLayout
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </TableLayout>
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:id="@+id/noteWidget">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/notes"
+                    android:id="@+id/notes"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBox"
+                android:text="@string/checkBox"
+                android:onClick="dateTimeAdder"
+                android:layout_below="@+id/noteWidget"/>
+
+
+
+            <DatePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/datePicker"
+                android:layout_below="@+id/checkBox"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:visibility="gone"/>
+
+            <TimePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/datePicker"
+                android:id="@+id/timePicker"
+                android:timePickerMode="spinner"
+                android:visibility="gone"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Done"
+                android:layout_below="@+id/timePicker"
+                android:text="@string/doneButton"
                 android:onClick="onClick"/>
+
         </RelativeLayout>
 
     </ScrollView>
+
 </RelativeLayout>

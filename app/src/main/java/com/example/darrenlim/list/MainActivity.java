@@ -451,8 +451,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 sign_up(v);
             }
         });
-    }
-    public void click2 (View v) {
-
+        et.requestFocus();
     }
 }
