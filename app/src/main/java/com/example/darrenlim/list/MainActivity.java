@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -52,7 +54,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
 
 
     private android.support.v7.widget.Toolbar _toolbar;
@@ -76,7 +78,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     static private boolean _reset = true;
     public static GoogleApiClient _googleAPI;
     public static Location _location;
+    private LocationManager _locationManager;
 
+    private LocationListener ll = new LocationListener(){
+        public void onLocationChanged(Location location) {
+            _location = location;
+        }
+        public void onProviderDisabled(String provider) {}
+        public void onProviderEnabled(String provider) {}
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+    };
+
+
+    @Override
+    public void onLocationChanged(Location locFromGps) {
+        _location = locFromGps;
+        System.out.println("new location");
+    }
+    @Override public void onProviderDisabled(String provider) {}
+    @Override public void onProviderEnabled(String provider) {}
+    @Override public void onStatusChanged(String provider, int status, Bundle extras) {}
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
@@ -85,13 +106,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(Bundle conn){
-        _location = LocationServices.FusedLocationApi.getLastLocation(_googleAPI);
-        if(_location == null) {
-            System.out.println("ERORRRRRRRRRRRRRRRRRR");
-        }
-        else {
-            System.out.println("WORKED");
-        }
+        checkCallingPermission("Use GPS?");
+        _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,60000,0, this);
     }
 
     @Override
@@ -127,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .addOnConnectionFailedListener(this)
                 .build();
 
+        _locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+
         // Enable Local Datastore.
         if(_reset) {
             ParseObject.registerSubclass(Reminder.class);
@@ -135,10 +154,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             ParseInstallation.getCurrentInstallation().saveInBackground();
             _reset = false;
         }
-//        ParseObject.registerSubclass(Reminder.class);
-//        Parse.enableLocalDatastore(this);
-//        Parse.initialize(this, "0BC99FjSMdD9UhB5ipsBEey5iSx85hSgb1zRK7l5", "gkZPUEo70rXQCKyjscI0Q4FDJvRHERzY78Kr8fiS");
-//        ParseInstallation.getCurrentInstallation().saveInBackground();
 
         _recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
