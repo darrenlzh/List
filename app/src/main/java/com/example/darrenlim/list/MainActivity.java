@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public static GoogleApiClient _googleAPI;
     public static Location _location;
 
+
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         System.out.println("CANNOT FIND");
@@ -84,10 +85,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(Bundle conn){
-        SystemClock.sleep(5000);
         _location = LocationServices.FusedLocationApi.getLastLocation(_googleAPI);
         if(_location == null) {
-            System.out.println("ERRRORRRRRRRRRRRRRRRRR");
+            System.out.println("ERORRRRRRRRRRRRRRRRRR");
         }
     }
 
