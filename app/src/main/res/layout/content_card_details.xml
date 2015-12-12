@@ -24,6 +24,12 @@
                 android:id="@+id/details_notes"
                 android:text="Make a demo video and upload to youtube. Prep for presentation!"
                 android:layout_below="@+id/details_title"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/okok"
+            android:text="Location: University at Buffalo"
+            android:layout_below="@+id/details_notes"/>
 
     </RelativeLayout>
     <ScrollView
