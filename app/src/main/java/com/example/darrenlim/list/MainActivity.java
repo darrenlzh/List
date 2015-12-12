@@ -89,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if(_location == null) {
             System.out.println("ERORRRRRRRRRRRRRRRRRR");
         }
+        else {
+            System.out.println("WORKED");
+        }
     }
 
     @Override
