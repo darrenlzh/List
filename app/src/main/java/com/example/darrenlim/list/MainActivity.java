@@ -132,6 +132,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             ParseInstallation.getCurrentInstallation().saveInBackground();
             _reset = false;
         }
+//        ParseObject.registerSubclass(Reminder.class);
+//        Parse.enableLocalDatastore(this);
+//        Parse.initialize(this, "0BC99FjSMdD9UhB5ipsBEey5iSx85hSgb1zRK7l5", "gkZPUEo70rXQCKyjscI0Q4FDJvRHERzY78Kr8fiS");
+//        ParseInstallation.getCurrentInstallation().saveInBackground();
 
         _recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
