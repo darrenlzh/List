@@ -39,6 +39,7 @@ import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ParseObject.registerSubclass(Reminder.class);
             Parse.enableLocalDatastore(this);
             Parse.initialize(this, "0BC99FjSMdD9UhB5ipsBEey5iSx85hSgb1zRK7l5", "gkZPUEo70rXQCKyjscI0Q4FDJvRHERzY78Kr8fiS");
+            ParseInstallation.getCurrentInstallation().saveInBackground();
             _reset = false;
         }
 
@@ -416,14 +418,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(getApplicationContext(), R.string.noUsernameError, Toast.LENGTH_LONG).show();
             return;
         }
-        else if(password.equals("")){
+        else if(password.equals("")) {
             Toast.makeText(getApplicationContext(), R.string.noPasswordError, Toast.LENGTH_LONG).show();
             return;
         }
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
-                if(user != null) {
+                if (user != null) {
                     _currentUser = user;
                     _dialog.dismiss();
                     _dialog = null;
