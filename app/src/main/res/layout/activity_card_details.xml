@@ -10,12 +10,12 @@
         android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay"
         app:elevation="6dp">
 
-            <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
-                android:layout_width="match_parent" android:layout_height="56dp"
-                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+        <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+            android:layout_width="match_parent" android:layout_height="56dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_task_menu" />
+    <include layout="@layout/content_card_details" />
 
 </android.support.design.widget.CoordinatorLayout>

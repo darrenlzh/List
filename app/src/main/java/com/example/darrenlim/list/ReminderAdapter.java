@@ -1,6 +1,8 @@
 package com.example.darrenlim.list;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,7 +29,19 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHo
         public ViewHolder(View v) {
             super(v);
             cardView = (CardView) v.findViewById(R.id.card_v);
-            textView = (TextView) v.findViewById(R.id.info_text);
+            textView = (TextView) v.findViewById(R.id.info_title);
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), CardDetails.class);
+// Pass data object in the bundle and populate details activity.
+//                    intent.putExtra(CardDetails.EXTRA_CONTACT, contact);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation(MainA.getContext(), (View) textView, R.string.transitionCardTitle);
+                    startActivity(intent);
+                }
+            });
+
         }
     }
 

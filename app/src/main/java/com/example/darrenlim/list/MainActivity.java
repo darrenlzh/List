@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         });
 
-//        SystemClock.sleep(1000);
+        SystemClock.sleep(1000);
     }
 
     public void deleteItemFromCloud(int position) {
