@@ -22,7 +22,12 @@
         android:name=".TaskMenu"
         android:label="@string/title_activity_task_menu"
         android:theme="@style/AppTheme.NoActionBar" >
-    </activity>
+        </activity>
+        <activity
+            android:name=".CardDetails"
+            android:label="CardDetails"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
