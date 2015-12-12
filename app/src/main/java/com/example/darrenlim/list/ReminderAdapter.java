@@ -12,12 +12,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by darrenlim on 12/1/15.
- */
 public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHolder> {
     private ArrayList<Reminder> _data;
-    private Context _context;
+    private static Context _context;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -28,17 +25,14 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHo
         public CardView cardView;
         public ViewHolder(View v) {
             super(v);
+            _context = v.getContext();
             cardView = (CardView) v.findViewById(R.id.card_v);
             textView = (TextView) v.findViewById(R.id.info_title);
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), CardDetails.class);
-// Pass data object in the bundle and populate details activity.
-//                    intent.putExtra(CardDetails.EXTRA_CONTACT, contact);
-                    ActivityOptionsCompat options = ActivityOptionsCompat.
-                            makeSceneTransitionAnimation(MainA.getContext(), (View) textView, R.string.transitionCardTitle);
-                    startActivity(intent);
+                    Intent intent = new Intent(_context, CardDetails.class);
+                    _context.startActivity(intent);
                 }
             });
 

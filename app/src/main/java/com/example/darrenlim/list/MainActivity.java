@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setupCollapsingToolbarLayout();
         setUpNavDrawer();
 
+
         // Enable Local Datastore.
         if(_reset) {
             ParseObject.registerSubclass(Reminder.class);
