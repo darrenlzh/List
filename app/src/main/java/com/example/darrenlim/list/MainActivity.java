@@ -106,8 +106,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(Bundle conn){
+        List<String> pro = _locationManager.getProviders(true);
+        for (String a : pro) {
+            System.out.println(pro);
+        }
         checkCallingPermission("Use GPS?");
-        _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,60000,0, this);
+       // _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, this);
     }
 
     @Override
