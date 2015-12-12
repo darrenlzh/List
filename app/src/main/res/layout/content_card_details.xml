@@ -10,24 +10,20 @@
         android:layout_height="wrap_content"
         android:id="@+id/header">
 
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/title"
-            android:id="@+id/title"
+            android:id="@+id/details_title"
+            android:text="Remember to submit 442 project"
             android:textSize="@dimen/title_size"/>
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/title">
 
-            <EditText
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/notes"
-                android:id="@+id/notes"/>
-        </android.support.design.widget.TextInputLayout>
+                android:id="@+id/details_notes"
+                android:text="Make a demo video and upload to youtube. Prep for presentation!"
+                android:layout_below="@+id/details_title"/>
 
     </RelativeLayout>
     <ScrollView
@@ -40,16 +36,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/label_field_container">
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </TableLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Done"
-                android:onClick="onClick"/>
         </RelativeLayout>
 
     </ScrollView>

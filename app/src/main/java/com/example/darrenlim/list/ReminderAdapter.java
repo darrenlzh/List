@@ -64,6 +64,7 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHo
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.textView.setText(_data.get(position).getTitle());
+        holder.cardView.setTag(position);
 
     }
 
