@@ -4,27 +4,19 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.telecom.ConnectionRequest;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,14 +33,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
-import com.parse.ParseAnonymousUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -57,14 +47,12 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener, View.OnClickListener {
 
 
     private android.support.v7.widget.Toolbar _toolbar;
@@ -90,6 +78,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public static Location _location;
 
     @Override
+    public void onLocationChanged(Location location) {
+        _location = location;
+    }
+    @Override public void onProviderDisabled(String provider) {}
+    @Override public void onProviderEnabled(String provider) {}
+    @Override public void onStatusChanged(String arg0, int arg1, Bundle arg2) {}
+
+    @Override
     public void onConnectionFailed(ConnectionResult result) {
         System.out.println("CANNOT FIND");
     }
@@ -100,12 +96,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationServices.FusedLocationApi.requestLocationUpdates(_googleAPI, locationRequest, new com.google.android.gms.location.LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                _location = location;
-            }
-        });
+        LocationServices.FusedLocationApi.requestLocationUpdates(_googleAPI, locationRequest, (com.google.android.gms.location.LocationListener) this);
         _location = LocationServices.FusedLocationApi.getLastLocation(_googleAPI);
     }
 
