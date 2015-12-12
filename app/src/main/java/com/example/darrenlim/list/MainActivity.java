@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onLocationChanged(Location locFromGps) {
         _location = locFromGps;
+        System.out.println("new location");
     }
     @Override public void onProviderDisabled(String provider) {}
     @Override public void onProviderEnabled(String provider) {}
