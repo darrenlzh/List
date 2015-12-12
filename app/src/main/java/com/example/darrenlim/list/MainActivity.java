@@ -142,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         _currentUser = ParseUser.getCurrentUser();
         if(_currentUser!= null) {
             getData();
-            SystemClock.sleep(1000);
         }
         else {
             LayoutInflater inflater = getLayoutInflater();
@@ -251,8 +250,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
         });
-
-        SystemClock.sleep(1000);
     }
 
     public void deleteItemFromCloud(int position) {
@@ -272,12 +269,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
-//                SystemClock.sleep(2000);
-//                getData();
-//                Intent intent = getIntent();
-//                Reminder reminder = (Reminder) intent.getSerializableExtra("Reminder");
-//                _data.add(reminder);
-
                 _rAdapter.updateAdapter(_data);
                 _rAdapter.notifyItemInserted(0);
                 _recyclerView.smoothScrollToPosition(0);
@@ -400,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        SystemClock.sleep(2000);
+        SystemClock.sleep(1000);
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
@@ -408,6 +399,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 _dialog.dismiss();
                 _dialog = null;
                 _dialogView = null;
+                getData();
             }
         });
     }
@@ -435,6 +427,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     _dialog.dismiss();
                     _dialog = null;
                     _dialogView = null;
+                    getData();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), R.string.logInError, Toast.LENGTH_LONG).show();
