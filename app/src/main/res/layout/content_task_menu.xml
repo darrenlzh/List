@@ -8,7 +8,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView">
+        android:id="@+id/taskScrollView">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -34,14 +34,25 @@
                     android:id="@+id/notes"/>
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/noteWidget"
+                android:id="@+id/categoryWidget">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/category"
+                    android:id="@+id/categoryText"/>
+            </android.support.design.widget.TextInputLayout>
+
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/reminderSwitch"
                 android:text="@string/checkBox"
-                android:layout_below="@+id/noteWidget"/>
-
-
+                android:layout_below="@+id/categoryWidget"/>
 
             <DatePicker
                 android:layout_width="wrap_content"
@@ -67,7 +78,7 @@
                 android:text="@string/doneButton"
                 android:onClick="onClick"/>
 
-        </RelativeLayout>
+            </RelativeLayout>
 
     </ScrollView>
 

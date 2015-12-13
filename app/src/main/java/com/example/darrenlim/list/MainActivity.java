@@ -2,6 +2,7 @@ package com.example.darrenlim.list;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,8 +11,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +52,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.security.acl.Group;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -76,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     private View _dialogView;
     static public ParseUser _currentUser;
     static private boolean _reset = true;
+    private String _currentCategory;
+    private NavigationView _nv;
+    private Menu _menu;
 
 
     @Override
@@ -89,9 +96,12 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         setupCollapsingToolbarLayout();
         setUpNavDrawer();
 
+        _currentCategory = "All";
+
         // Enable Local Datastore.
         if(_reset) {
             ParseObject.registerSubclass(Reminder.class);
+            ParseObject.registerSubclass(Category.class);
             Parse.enableLocalDatastore(this);
             Parse.initialize(this, "0BC99FjSMdD9UhB5ipsBEey5iSx85hSgb1zRK7l5", "gkZPUEo70rXQCKyjscI0Q4FDJvRHERzY78Kr8fiS");
             ParseInstallation.getCurrentInstallation().saveInBackground();
@@ -238,6 +248,9 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     public void getData() {
         _data.clear();
         ParseQuery<Reminder> query = ParseQuery.getQuery(Reminder.class);
+        if(!_currentCategory.equals("All")){
+            query.whereEqualTo("category",_currentCategory);
+        }
         query.whereEqualTo("user", _currentUser.getUsername());
         query.orderByDescending("updatedAt");
         query.findInBackground(new FindCallback<Reminder>() {
@@ -281,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 //Write your code if there's no result
             }
         }
-    }//onActivityResult
+    }
 
 
     @Override
@@ -323,15 +336,66 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             _toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (_currentUser == null) {
-                        Intent intent = getIntent();
-                        finish();
-                        startActivity(intent);
-                        return;
-                    }
+                    _nv = (NavigationView) findViewById(R.id.navigationView);
                     _drawerLayout.openDrawer(GravityCompat.START);
+
+                    _nv.getMenu().getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            for(int i = 0; i < _nv.getMenu().size(); i++){
+                                if(_nv.getMenu().getItem(i).getTitle().toString().equals(_currentCategory)){
+                                    _nv.getMenu().getItem(i).setChecked(false);
+                                }
+                            }
+                            item.setChecked(true);
+                            _currentCategory = item.getTitle().toString();
+                            getData();
+                            return true;
+                        }
+                    });
+                    if(_currentCategory.equals("All")){
+                        _nv.getMenu().getItem(0).setChecked(true);
+                    }
+
                     TextView text = (TextView) findViewById(R.id.user);
                     text.setText(_currentUser.getString("Name"));
+                    ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
+                    query.whereEqualTo("user", ParseUser.getCurrentUser().getUsername());
+                    query.findInBackground(new FindCallback<Category>() {
+                        @Override
+                        public void done(List<Category> categories, ParseException e) {
+                            if (e == null) {
+                                _menu = _nv.getMenu();
+                                for (Category c : categories) {
+                                    boolean exists = false;
+                                    for(int x = 0; x < _menu.size(); x++){
+                                        if(_menu.getItem(x).getTitle().toString().equals(c.getCategory())){
+                                            exists = true;
+                                            break;
+                                        }
+                                    }
+                                    if(exists){ continue;}
+                                    MenuItem item = _menu.add(c.getCategory());
+                                    if(_currentCategory.equals(item.getTitle())){ item.setChecked(true);}
+                                    item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                        @Override
+                                        public boolean onMenuItemClick(MenuItem item) {
+                                            for(int i = 0; i < _menu.size(); i++){
+                                                if(_menu.getItem(i).getTitle().toString().equals(_currentCategory)){
+                                                    _menu.getItem(i).setChecked(false);
+                                                }
+                                            }
+                                            item.setChecked(true);
+                                            _currentCategory = item.getTitle().toString();
+                                            getData();
+                                            return true;
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+
 
                 }
             });

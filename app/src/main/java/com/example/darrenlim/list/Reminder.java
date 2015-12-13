@@ -50,9 +50,13 @@ public class Reminder extends ParseObject implements Serializable{
 
     public void setTime(Integer time) {put("time", time);}
 
-    public void setLocation(String s) {put("location",s);}
+    public void setLocation(String location) {put("location",location);}
 
     public String getLocation() {return getString("location");}
+
+    public void setCategory(String category) {put("category",category);}
+
+    public String getCategory() { return getString("category");}
 
 
 //    public Reminder(String id, String title, String notes, String label, Integer priority, Boolean remindOnDay, Boolean remindOnLoc, Integer date, Integer time) {
