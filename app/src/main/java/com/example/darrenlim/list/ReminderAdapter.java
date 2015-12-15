@@ -28,13 +28,13 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHo
             _context = v.getContext();
             cardView = (CardView) v.findViewById(R.id.card_v);
             textView = (TextView) v.findViewById(R.id.info_title);
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(_context, CardDetails.class);
-                    _context.startActivity(intent);
-                }
-            });
+//            cardView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(_context, CardDetails.class);
+//                    _context.startActivity(intent);
+//                }
+//            });
 
         }
     }
@@ -64,7 +64,14 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHo
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.textView.setText(_data.get(position).getTitle());
-        holder.cardView.setTag(position);
+//        holder.cardView.setTag(position);
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(_context, CardDetails.class);
+                    _context.startActivity(intent);
+                }
+            });
 
     }
 

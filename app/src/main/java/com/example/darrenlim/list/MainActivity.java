@@ -46,6 +46,7 @@ import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 
 import com.parse.ParseException;
@@ -106,9 +107,37 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             ParseObject.registerSubclass(Category.class);
             Parse.enableLocalDatastore(this);
             Parse.initialize(this, "0BC99FjSMdD9UhB5ipsBEey5iSx85hSgb1zRK7l5", "gkZPUEo70rXQCKyjscI0Q4FDJvRHERzY78Kr8fiS");
-            ParseInstallation.getCurrentInstallation().saveInBackground();
+            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+//            installation.put("userName", ParseUser.getCurrentUser().getUsername());
+            installation.saveInBackground();
+
             _reset = false;
         }
+
+
+//        System.out.println(ParseUser.getCurrentUser().getUsername());
+//        System.out.println(installation.getString("ObjectId"));
+//        System.out.println(installation.getString("deviceToken"));
+//        System.out.println(installation.getString("localeIdentifier"));
+//        System.out.println(installation.getString("parseVersion"));
+//        System.out.println(installation.getString("appIdentifier"));
+//        System.out.println(installation.getString("appName"));
+//        System.out.println(installation.getDate("updatedAt"));
+//        System.out.println(installation.getString("deviceType"));
+//        System.out.println(installation.getString("pushType"));
+//        System.out.println(installation.getString("installationId"));
+//        System.out.println(installation.getString("appVersion"));
+//        System.out.println(installation.getString("timeZone"));
+//        System.out.println(installation.getDate("createdAt"));
+
+//        ParseQuery pushQuery = ParseInstallation.getQuery();
+//        pushQuery.whereEqualTo("userName", ParseUser.getCurrentUser().getUsername());
+
+        // Send push notification to query
+//        ParsePush push = new ParsePush();
+//        push.setQuery(pushQuery); // Set our Installation query
+//        push.setMessage("This is a test notification");
+//        push.sendInBackground();
 
         _recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
