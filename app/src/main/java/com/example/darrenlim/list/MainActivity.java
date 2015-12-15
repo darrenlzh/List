@@ -265,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             case R.id.fab2:
 //                animateFAB2();
                 animateFAB();
+                startActivityForResult(new Intent(getApplicationContext(), CheckListMenu.class), 1);
                 break;
         }
     }

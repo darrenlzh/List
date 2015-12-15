@@ -38,6 +38,11 @@
         android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
+            android:name=".CheckListMenu"
+            android:label="@string/title_activity_check_list_menu"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
             android:name=".CardDetails"
             android:label="CardDetails"
             android:theme="@style/AppTheme.NoActionBar">
