@@ -18,6 +18,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -25,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -42,6 +45,7 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
     private CollapsingToolbarLayout _collapsingToolbarLayout;
     private android.support.v7.widget.Toolbar _toolbar;
     private ArrayList<String> _categories;
+    private int _priority;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,22 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
             }
         });
 
+        Spinner spinner = (Spinner) findViewById(R.id.taskPrioritySpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.prioritySpinnerArray,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                _priority = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                _priority = 0;
+            }
+        });
+
 
         _categories = new ArrayList<>();
         ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
@@ -73,8 +93,8 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
         query.findInBackground(new FindCallback<Category>() {
             @Override
             public void done(List<Category> categories, ParseException e) {
-                if(e == null){
-                    for(Category c: categories){
+                if (e == null) {
+                    for (Category c : categories) {
                         _categories.add(c.getCategory());
                     }
                 }
@@ -114,11 +134,11 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
                 Toast.makeText(TaskMenu.this, "Category \""+category+"\" added to your categories!" , Toast.LENGTH_LONG).show();
             }
         }
+
         reminder.setCategory(category);
-
         reminder.setUser(ParseUser.getCurrentUser().getUsername());
+        reminder.setPriority(_priority);
 
-        reminder.setLocation("University at Buffalo");
         reminder.saveInBackground();
         MainActivity._data.add(0, reminder);
         setResult(MainActivity.RESULT_OK, new Intent());
@@ -151,4 +171,5 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
             //collapsingToolbarLayout.setExpandedTitleColor(0xED1C24);
         }
     }
+
 }

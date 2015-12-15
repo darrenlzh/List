@@ -1,7 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/drawerAll"
-        android:title="@string/all" />
+        android:title="@string/all"
+        android:onClick="drawerAllItem"/>
+
+    <item
+        android:title="@string/lowPriority"
+        android:onClick="drawerPriorityClick"/>
+
+    <item
+        android:title="@string/mediumPriority"
+        android:onClick="drawerPriorityClick"/>
+
+    <item
+        android:title="@string/highPriority"
+        android:onClick="drawerPriorityClick"/>
 
 </menu>

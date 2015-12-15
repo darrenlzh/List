@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     static public ParseUser _currentUser;
     static private boolean _reset = true;
     private String _currentCategory;
+    private int _priorityLevel;
     private NavigationView _nv;
     private Menu _menu;
 
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         setUpNavDrawer();
 
         _currentCategory = "All";
+        _priorityLevel = 0;
 
         // Enable Local Datastore.
         if(_reset) {
@@ -152,6 +154,50 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         _fab1.setOnClickListener(this);
         _fab2.setOnClickListener(this);
 
+        SwipeableRecyclerViewTouchListener swipeTouchListener =
+                new SwipeableRecyclerViewTouchListener(_recyclerView,
+                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
+                            @Override
+                            public boolean canSwipe(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    String category =  _data.get(position).getCategory();
+
+                                    deleteItemFromCloud(position);
+                                    _data.remove(position);
+                                    _rAdapter.notifyItemRemoved(position);
+
+                                    if(!category.equals("")){
+                                        deleteCategoryFromCloud(category);
+                                    }
+                                }
+//                                _rAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                System.out.println(_data.size());
+                                for (int position : reverseSortedPositions) {
+                                    String category =  _data.get(position).getCategory();
+
+                                    deleteItemFromCloud(position);
+                                    _data.remove(position);
+                                    _rAdapter.notifyItemRemoved(position);
+
+                                    if(!category.equals("")){
+                                        deleteCategoryFromCloud(category);
+                                    }
+                                }
+//                                _rAdapter.notifyDataSetChanged();
+                            }
+                        });
+
+        _recyclerView.addOnItemTouchListener(swipeTouchListener);
+
         _currentUser = ParseUser.getCurrentUser();
         if(_currentUser!= null) {
             getData();
@@ -173,38 +219,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             _dialog.setView(view);
             _dialog.show();
         }
-
-        SwipeableRecyclerViewTouchListener swipeTouchListener =
-                new SwipeableRecyclerViewTouchListener(_recyclerView,
-                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
-                            @Override
-                            public boolean canSwipe(int position) {
-                                return true;
-                            }
-
-                            @Override
-                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
-                                    deleteItemFromCloud(position);
-                                    _data.remove(position);
-                                    _rAdapter.notifyItemRemoved(position);
-                                }
-//                                _rAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                System.out.println(_data.size());
-                                for (int position : reverseSortedPositions) {
-                                    deleteItemFromCloud(position);
-                                    _data.remove(position);
-                                    _rAdapter.notifyItemRemoved(position);
-                                }
-//                                _rAdapter.notifyDataSetChanged();
-                            }
-                        });
-
-        _recyclerView.addOnItemTouchListener(swipeTouchListener);
     }
 
     @Override
@@ -248,36 +262,64 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     public void getData() {
         _data.clear();
         ParseQuery<Reminder> query = ParseQuery.getQuery(Reminder.class);
-        if(!_currentCategory.equals("All")){
+        if(!_currentCategory.equals("All") && !_currentCategory.equals("")){
             query.whereEqualTo("category",_currentCategory);
+        }
+        if(_priorityLevel != 0){
+            query.whereEqualTo("priority",_priorityLevel);
         }
         query.whereEqualTo("user", _currentUser.getUsername());
         query.orderByDescending("updatedAt");
-        query.findInBackground(new FindCallback<Reminder>() {
-            @Override
-            public void done(List<Reminder> reminders, ParseException e) {
-                if (e == null) {
-                    for (Reminder r : reminders) {
-                        _data.add(r);
-                    }
-                }
-                _rAdapter.updateAdapter(_data);
-                _recyclerView.setAdapter(_rAdapter);
+        try{
+            List<Reminder> reminders = query.find();
+            for (Reminder r : reminders) {
+                _data.add(r);
             }
-
-        });
+        }
+        catch (ParseException e ){}
+        _rAdapter.updateAdapter(_data);
+        _recyclerView.setAdapter(_rAdapter);
     }
 
     public void deleteItemFromCloud(int position) {
         String id = _data.get(position).getId();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ReminderObj");
-        query.getInBackground(id, new GetCallback<ParseObject>() {
-            public void done(ParseObject object, ParseException e) {
-                if (e == null) {
-                    object.deleteInBackground();
+        try {
+            ParseObject object = query.get(id);
+            object.delete();
+        }
+        catch (ParseException e){}
+    }
+
+    public void deleteCategoryFromCloud(String category){
+        ParseQuery<Reminder> query = ParseQuery.getQuery(Reminder.class);
+        query.whereEqualTo("category", category);
+        query.whereEqualTo("user",_currentUser.getUsername());
+
+        try {
+            List<Reminder> remindList = query.find();
+            if(remindList.size() == 0) {
+                ParseQuery<Category> removeQuery = ParseQuery.getQuery(Category.class);
+                removeQuery.whereEqualTo("category", category);
+                removeQuery.whereEqualTo("user",_currentUser.getUsername());
+                try {
+                    List<Category> cat = removeQuery.find();
+                    for(Category c: cat) {
+                        c.deleteInBackground();
+                        _drawerLayout.openDrawer(GravityCompat.START);
+                        for(int i = _menu.size()-1; i > 3; i--){
+                            if(_menu.getItem(i).getTitle().equals(category)){
+                                _menu.getItem(i).setVisible(false);
+                            }
+                        }
+                        _drawerLayout.closeDrawers();
+
+                    }
                 }
+                catch(ParseException b) {}
             }
-        });
+        }
+        catch (ParseException a){}
     }
 
     @Override
@@ -338,65 +380,54 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 public void onClick(View v) {
                     _nv = (NavigationView) findViewById(R.id.navigationView);
                     _drawerLayout.openDrawer(GravityCompat.START);
+                    _menu = _nv.getMenu();
+                    _menu.clear();
+                    getMenuInflater().inflate(R.menu.drawer, _menu);
 
-                    _nv.getMenu().getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            for(int i = 0; i < _nv.getMenu().size(); i++){
-                                if(_nv.getMenu().getItem(i).getTitle().toString().equals(_currentCategory)){
-                                    _nv.getMenu().getItem(i).setChecked(false);
-                                }
-                            }
-                            item.setChecked(true);
-                            _currentCategory = item.getTitle().toString();
-                            getData();
-                            return true;
-                        }
-                    });
-                    if(_currentCategory.equals("All")){
-                        _nv.getMenu().getItem(0).setChecked(true);
+                    if (_currentCategory.equals("All")) {
+                        _menu.getItem(0).setChecked(true);
+                    }
+
+                    if(_priorityLevel != 0){
+                        _menu.getItem(_priorityLevel).setChecked(true);
                     }
 
                     TextView text = (TextView) findViewById(R.id.user);
                     text.setText(_currentUser.getString("Name"));
+
                     ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
                     query.whereEqualTo("user", ParseUser.getCurrentUser().getUsername());
-                    query.findInBackground(new FindCallback<Category>() {
-                        @Override
-                        public void done(List<Category> categories, ParseException e) {
-                            if (e == null) {
-                                _menu = _nv.getMenu();
-                                for (Category c : categories) {
-                                    boolean exists = false;
-                                    for(int x = 0; x < _menu.size(); x++){
-                                        if(_menu.getItem(x).getTitle().toString().equals(c.getCategory())){
-                                            exists = true;
-                                            break;
-                                        }
-                                    }
-                                    if(exists){ continue;}
-                                    MenuItem item = _menu.add(c.getCategory());
-                                    if(_currentCategory.equals(item.getTitle())){ item.setChecked(true);}
-                                    item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                                        @Override
-                                        public boolean onMenuItemClick(MenuItem item) {
-                                            for(int i = 0; i < _menu.size(); i++){
-                                                if(_menu.getItem(i).getTitle().toString().equals(_currentCategory)){
-                                                    _menu.getItem(i).setChecked(false);
-                                                }
-                                            }
-                                            item.setChecked(true);
-                                            _currentCategory = item.getTitle().toString();
-                                            getData();
-                                            return true;
-                                        }
-                                    });
-                                }
-                            }
+                    try {
+                        List<Category> categories = query.find();
+                        setupDrawerCategories(categories);
+                    }
+                    catch (ParseException e){}
+                }
+            });
+        }
+    }
+
+    private void setupDrawerCategories(List<Category> list){
+        for (Category c : list) {
+            MenuItem item = _menu.add(c.getCategory());
+            if (_currentCategory.equals(item.getTitle())) {
+                item.setChecked(true);
+            }
+            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (!item.getTitle().equals(_currentCategory)) {
+                        for (int i = 0; i < _menu.size(); i++) {
+                            _menu.getItem(i).setChecked(false);
                         }
-                    });
+                        item.setChecked(true);
+                        _currentCategory = item.getTitle().toString();
+                        _priorityLevel = 0;
 
-
+                        getData();
+                        _drawerLayout.closeDrawers();
+                    }
+                    return true;
                 }
             });
         }
@@ -405,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     private void setupCollapsingToolbarLayout(){
 
         _collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        if(_collapsingToolbarLayout != null){
+        if (_collapsingToolbarLayout != null){
             _collapsingToolbarLayout.setTitle(_toolbar.getTitle());
             _collapsingToolbarLayout.setCollapsedTitleGravity(Gravity.CENTER_VERTICAL);
             //collapsingToolbarLayout.setCollapsedTitleTextColor(0xED1C24);
@@ -423,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
     }
     public void sign_up(View v){
-        String name, username, password;
+        final String name, username, password;
         EditText et;
         et = (EditText) _dialogView.findViewById(R.id.logName);
         name = et.getText().toString();
@@ -447,28 +478,24 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         user.setUsername(username);
         user.setPassword(password);
         user.put("Name", name);
-        user.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Toast.makeText(getApplicationContext(), "Sign Up Successful, Logging In", Toast.LENGTH_LONG).show();
-                } else {
-                    System.out.println("ERROR");
-                }
-            }
-        });
-
-        SystemClock.sleep(1000);
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                _currentUser = user;
+        try {
+            user.signUp();
+            Toast.makeText(getApplicationContext(), "Sign Up Successful, Logging In", Toast.LENGTH_LONG).show();
+            try {
+                ParseUser.logIn(username, password);
+                _currentUser = ParseUser.getCurrentUser();
                 _dialog.dismiss();
                 _dialog = null;
                 _dialogView = null;
                 getData();
             }
-        });
+            catch (ParseException x){
+                Toast.makeText(getApplicationContext(), "Log In Failed", Toast.LENGTH_LONG).show();
+            }
+        }
+        catch (ParseException e){
+            Toast.makeText(getApplicationContext(), "Sign Up Failed", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void log_in(View v){
@@ -486,24 +513,20 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             Toast.makeText(getApplicationContext(), R.string.noPasswordError, Toast.LENGTH_LONG).show();
             return;
         }
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (user != null) {
-                    _currentUser = user;
-                    _dialog.dismiss();
-                    _dialog = null;
-                    _dialogView = null;
-                    getData();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), R.string.logInError, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        try {
+            ParseUser.logIn(username, password);
+            _currentUser = ParseUser.getCurrentUser();
+            _dialog.dismiss();
+            _dialog = null;
+            _dialogView = null;
+            getData();
+        }
+        catch (ParseException e){
+            Toast.makeText(getApplicationContext(), R.string.logInError, Toast.LENGTH_LONG).show();
+        }
     }
 
-    public void update(View v){
+    public void updateDialog(View v){
         EditText et = (EditText) _dialogView.findViewById(R.id.logName);
         et.setVisibility(View.VISIBLE);
         Button b = (Button) _dialogView.findViewById(R.id.logButton);
@@ -516,5 +539,41 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             }
         });
         et.requestFocus();
+    }
+
+    public void drawerAllItem(MenuItem item){
+        if(!item.isChecked()) {
+            for (int i = 0; i < _menu.size(); i++) {
+                _menu.getItem(i).setChecked(false);
+            }
+            item.setChecked(true);
+            _currentCategory = item.getTitle().toString();
+            _priorityLevel = 0;
+
+            getData();
+            _drawerLayout.closeDrawers();
+        }
+    }
+
+    public void drawerPriorityClick(MenuItem item) {
+        if(!item.isChecked()) {
+            for (int i = 0; i < _menu.size(); i++) {
+                _menu.getItem(i).setChecked(false);
+            }
+
+            _currentCategory = "";
+            item.setChecked(true);
+
+            if (item.getTitle().toString().equals("Low Priority")) {
+                _priorityLevel = 1;
+            } else if (item.getTitle().toString().equals("Medium Priority")) {
+                _priorityLevel = 2;
+            } else if (item.getTitle().toString().equals("High Priority")) {
+                _priorityLevel = 3;
+            }
+
+            getData();
+            _drawerLayout.closeDrawers();
+        }
     }
 }

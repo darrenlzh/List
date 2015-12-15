@@ -28,4 +28,15 @@
     <string name="transitionCardTitle">transitionCardTitle</string>
     <string name="checkBox">Add Date/Time Reminder</string>
     <string name="category">Category</string>
+    <string name="priority">Priority: </string>
+    <string name="lowPriority">Low Priority</string>
+    <string name="mediumPriority">Medium Priority</string>
+    <string name="highPriority">High Priority</string>
+
+    <string-array name="prioritySpinnerArray">
+        <item>None</item>
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
 </resources>

@@ -71,12 +71,30 @@
                 android:timePickerMode="spinner"
                 android:visibility="gone"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskPriorityText"
+                android:layout_below="@+id/timePicker"
+                android:text="@string/priority"
+                android:layout_marginTop="12dp"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskPrioritySpinner"
+                android:layout_below="@+id/timePicker"
+                android:layout_toEndOf="@+id/taskPriorityText"
+                android:layout_marginTop="10dp">
+            </Spinner>
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/timePicker"
+                android:layout_below="@+id/taskPrioritySpinner"
                 android:text="@string/doneButton"
-                android:onClick="onClick"/>
+                android:onClick="onClick"
+                android:layout_marginTop="10dp"/>
 
             </RelativeLayout>
 
