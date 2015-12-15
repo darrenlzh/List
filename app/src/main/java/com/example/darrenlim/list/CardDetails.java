@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 /**
  * Created by darrenlim on 12/11/15.
@@ -13,12 +14,17 @@ import android.view.View;
 public class CardDetails extends AppCompatActivity{
 
     private android.support.v7.widget.Toolbar _toolbar;
-
+    private int _position;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        _position = getIntent().getIntExtra("intPos", 0);
         setContentView(R.layout.activity_card_details);
         setUpToolbar();
+        TextView detailsTitle = (TextView) findViewById(R.id.details_title);
+        TextView detailsNotes = (TextView) findViewById(R.id.details_notes);
+        detailsTitle.setText(MainActivity._data.get(_position).getTitle());
+        detailsNotes.setText(MainActivity._data.get(_position).getNotes());
 
     }
 

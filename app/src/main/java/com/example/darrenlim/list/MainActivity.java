@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -86,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     private NavigationView _nv;
     private Menu _menu;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         // Attach the layout manager to the recycler view
         _recyclerView.setLayoutManager(gridLayoutManager);
         _recyclerView.setItemAnimator(new DefaultItemAnimator());
-        SpacesItemDecoration decoration = new SpacesItemDecoration(25);
+        SpacesItemDecoration decoration = new SpacesItemDecoration(15);
         _recyclerView.addItemDecoration(decoration);
         final int fabMargin = getResources().getDimensionPixelSize(R.dimen.fab_margin);
         _recyclerView.addOnScrollListener(new MyRecyclerScroll() {
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                                         deleteCategoryFromCloud(category);
                                     }
                                 }
-//                                _rAdapter.notifyDataSetChanged();
+                                _rAdapter.notifyDataSetChanged();
                             }
 
                             @Override
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                                         deleteCategoryFromCloud(category);
                                     }
                                 }
-//                                _rAdapter.notifyDataSetChanged();
+                                _rAdapter.notifyDataSetChanged();
                             }
                         });
 
@@ -603,6 +603,26 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
             getData();
             _drawerLayout.closeDrawers();
+        }
+    }
+
+    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+        private int space;
+
+        public SpacesItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view,
+                                   RecyclerView parent, RecyclerView.State state) {
+            outRect.left = space;
+            outRect.right = space;
+            outRect.bottom = space;
+
+            // Add top margin only for the first item to avoid double space between items
+
+                outRect.top = space;
         }
     }
 }
