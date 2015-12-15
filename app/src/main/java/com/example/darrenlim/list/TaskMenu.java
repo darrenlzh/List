@@ -110,7 +110,7 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
         title = text.getText().toString();
         if(title.equals("")) {
             Toast.makeText(TaskMenu.this, R.string.noTitleError, Toast.LENGTH_LONG).show();
-            ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
+            ScrollView scrollView = (ScrollView) findViewById(R.id.taskScrollView);
             scrollView.smoothScrollTo(0,0);
             text.setFocusableInTouchMode(true);
             text.requestFocus();
