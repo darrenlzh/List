@@ -34,16 +34,16 @@
                     android:id="@+id/notes"/>
             </android.support.design.widget.TextInputLayout>
 
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/noteWidget"
                 android:id="@+id/categoryWidget">
-
-                <EditText
+                <AutoCompleteTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/category"
+                    android:hint="Category"
                     android:id="@+id/categoryText"/>
             </android.support.design.widget.TextInputLayout>
 

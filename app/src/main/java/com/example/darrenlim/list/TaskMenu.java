@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.MatrixCursor;
+import android.graphics.Color;
 import android.media.Image;
 import android.media.RingtoneManager;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -108,6 +110,11 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
                 }
             }
         });
+        ArrayAdapter<String> autoCompleteAdapter = new ArrayAdapter<String>
+                (this,android.R.layout.select_dialog_item,_categories);
+        AutoCompleteTextView actv = (AutoCompleteTextView) findViewById(R.id.categoryText);
+        actv.setThreshold(1);
+        actv.setAdapter(autoCompleteAdapter);
     }
 
     @Override
