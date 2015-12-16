@@ -47,7 +47,9 @@
             android:label="CardDetails"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
+        <service android:name=".AlarmService"
+            android:enabled="true"/>
+        <receiver android:name=".AlarmReceiver"/>
         <service android:name="com.parse.PushService" />
         <receiver android:name="com.parse.ParsePushBroadcastReceiver"
             android:exported="false">

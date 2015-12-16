@@ -1,16 +1,21 @@
 package com.example.darrenlim.list;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.MatrixCursor;
 import android.media.Image;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
@@ -38,6 +43,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
@@ -100,6 +106,13 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
                 }
             }
         });
+
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+        System.out.println("HELLO");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 10*1000, pendingIntent);
+
     }
 
     @Override
