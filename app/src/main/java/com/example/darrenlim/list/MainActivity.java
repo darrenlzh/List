@@ -120,31 +120,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             _reset = false;
         }
 
-
-//        System.out.println(ParseUser.getCurrentUser().getUsername());
-//        System.out.println(installation.getString("ObjectId"));
-//        System.out.println(installation.getString("deviceToken"));
-//        System.out.println(installation.getString("localeIdentifier"));
-//        System.out.println(installation.getString("parseVersion"));
-//        System.out.println(installation.getString("appIdentifier"));
-//        System.out.println(installation.getString("appName"));
-//        System.out.println(installation.getDate("updatedAt"));
-//        System.out.println(installation.getString("deviceType"));
-//        System.out.println(installation.getString("pushType"));
-//        System.out.println(installation.getString("installationId"));
-//        System.out.println(installation.getString("appVersion"));
-//        System.out.println(installation.getString("timeZone"));
-//        System.out.println(installation.getDate("createdAt"));
-
-//        ParseQuery pushQuery = ParseInstallation.getQuery();
-//        pushQuery.whereEqualTo("userName", ParseUser.getCurrentUser().getUsername());
-
-        // Send push notification to query
-//        ParsePush push = new ParsePush();
-//        push.setQuery(pushQuery); // Set our Installation query
-//        push.setMessage("This is a test notification");
-//        push.sendInBackground();
-
         _recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         // use this setting to improve performance if you know that changes
@@ -356,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 _rAdapter.updateAdapter(_data);
                 _rAdapter.notifyItemInserted(0);
                 _recyclerView.smoothScrollToPosition(0);
-//                _recyclerView.setAdapter(_rAdapter);
+                _recyclerView.setAdapter(_rAdapter);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result

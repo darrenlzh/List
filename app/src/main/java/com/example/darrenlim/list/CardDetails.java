@@ -42,6 +42,7 @@ public class CardDetails extends AppCompatActivity{
         }
         else {
             _position = getIntent().getIntExtra("intPos", 0);
+            System.out.println(_position);
             detailsTitle.setText(MainActivity._data.get(_position).getTitle());
             detailsNotes.setText(MainActivity._data.get(_position).getNotes());
             String s = MainActivity._data.get(_position).getCategory();
