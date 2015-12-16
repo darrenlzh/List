@@ -9,6 +9,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 public class CardDetails extends AppCompatActivity{
 
     private android.support.v7.widget.Toolbar _toolbar;
@@ -20,18 +22,19 @@ public class CardDetails extends AppCompatActivity{
         setContentView(R.layout.activity_card_details);
         setUpToolbar();
         _isNotification = getIntent().getBooleanExtra("notify", false);
+        TextView detailsTitle = (TextView) findViewById(R.id.details_title);
+        TextView detailsNotes = (TextView) findViewById(R.id.details_notes);
+        TextView detailsCategory = (TextView) findViewById(R.id.details_category);
         if(_isNotification){
-            TextView detailsTitle = (TextView) findViewById(R.id.details_title);
-            TextView detailsNotes = (TextView) findViewById(R.id.details_notes);
             detailsTitle.setText(getIntent().getStringExtra("title"));
             detailsNotes.setText(getIntent().getStringExtra("notes"));
+            detailsCategory.setText("Category: " + getIntent().getStringExtra("category"));
         }
         else {
             _position = getIntent().getIntExtra("intPos", 0);
-            TextView detailsTitle = (TextView) findViewById(R.id.details_title);
-            TextView detailsNotes = (TextView) findViewById(R.id.details_notes);
             detailsTitle.setText(MainActivity._data.get(_position).getTitle());
             detailsNotes.setText(MainActivity._data.get(_position).getNotes());
+            detailsCategory.setText("Category: " + MainActivity._data.get(_position).getCategory());
         }
     }
 
@@ -47,6 +50,9 @@ public class CardDetails extends AppCompatActivity{
                     if (!_isNotification) {
                         setResult(Activity.RESULT_CANCELED, new Intent());
                     }
+                    else if(MainActivity._currentUser == null) {
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    }
                     finish();
                 }
             });
@@ -55,7 +61,11 @@ public class CardDetails extends AppCompatActivity{
     @Override
     public boolean onKeyDown(int keycode, KeyEvent event){
         if(keycode == KeyEvent.KEYCODE_BACK && _isNotification){
-            finish();
+            if(MainActivity._currentUser == null) {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+                return true;
+            }
         }
         return super.onKeyDown(keycode,event);
     }

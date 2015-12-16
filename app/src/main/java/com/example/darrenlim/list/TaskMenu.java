@@ -169,9 +169,8 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
             cal.set(Calendar.MILLISECOND,0);
 
             Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class)
-                    .putExtra("notify", true).putExtra("title", title).putExtra("notes", notes);
+                    .putExtra("notify", true).putExtra("title", title).putExtra("notes", notes).putExtra("category",category);
             AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-            System.out.println("HELLO");
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarm.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
             cal.setTimeInMillis(System.currentTimeMillis());

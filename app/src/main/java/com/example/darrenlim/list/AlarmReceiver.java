@@ -18,7 +18,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         Intent i = new Intent(context, AlarmService.class)
                 .putExtra("notify", intent.getBooleanExtra("notify", true))
                 .putExtra("title", intent.getStringExtra("title"))
-                .putExtra("notes",intent.getStringExtra("notes"));
+                .putExtra("notes",intent.getStringExtra("notes"))
+                .putExtra("category",intent.getStringExtra("category"));
         context.startService(i);
     }
 }

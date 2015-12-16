@@ -14,22 +14,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/details_title"
-            android:text="Remember to submit 442 project"
+            android:text=""
             android:textSize="@dimen/title_size"/>
 
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/details_notes"
-                android:text="Make a demo video and upload to youtube. Prep for presentation!"
-                android:layout_below="@+id/details_title"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/details_notes"
+            android:text=""
+            android:layout_below="@+id/details_title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/details_category"
+            android:text=""
+            android:layout_below="@+id/details_notes"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/okok"
             android:text="Location: University at Buffalo"
-            android:layout_below="@+id/details_notes"/>
+            android:layout_below="@+id/details_category"/>
 
     </RelativeLayout>
     <ScrollView
