@@ -340,14 +340,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                     List<Category> cat = removeQuery.find();
                     for(Category c: cat) {
                         c.deleteInBackground();
-                        _drawerLayout.openDrawer(GravityCompat.START);
-                        for(int i = _menu.size()-1; i > 3; i--){
-                            if(_menu.getItem(i).getTitle().equals(category)){
-                                _menu.getItem(i).setVisible(false);
-                            }
-                        }
-                        _drawerLayout.closeDrawers();
-
                     }
                 }
                 catch(ParseException b) {}
