@@ -27,6 +27,8 @@ public class ChecklistItemAdapter extends RecyclerView.Adapter<ChecklistItemAdap
     private int _pos;
     private static ImageButton _imageButton;
     private static EditText _editText;
+    private static Boolean _isChecklist;
+    private static TextView _textView;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -37,14 +39,22 @@ public class ChecklistItemAdapter extends RecyclerView.Adapter<ChecklistItemAdap
         public CheckBox checkBox;
         public EditText editText;
         public ImageButton imageButton;
+        public TextView textView;
         public ViewHolder(View v) {
             super(v);
             _context = v.getContext();
-            checkBox = (CheckBox) v.findViewById(R.id.check_box);
-            editText = (EditText) v.findViewById(R.id.check_text);
-            imageButton = (ImageButton) v.findViewById(R.id.add_item_button);
-            _imageButton = imageButton;
-            _editText = editText;
+            if(!_isChecklist) {
+                checkBox = (CheckBox) v.findViewById(R.id.check_box);
+                editText = (EditText) v.findViewById(R.id.check_text);
+                imageButton = (ImageButton) v.findViewById(R.id.add_item_button);
+                _imageButton = imageButton;
+                _editText = editText;
+            }
+            else {
+                checkBox = (CheckBox) v.findViewById(R.id.check_box_detail);
+                textView = (TextView) v.findViewById(R.id.check_text_detail);
+                _textView = textView;
+            }
 //            cardView.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -54,17 +64,14 @@ public class ChecklistItemAdapter extends RecyclerView.Adapter<ChecklistItemAdap
 //            });
 
         }
-
-        public int myGetPosition() {
-            return getAdapterPosition();
-        }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ChecklistItemAdapter(Context context, ArrayList<String> items, ArrayList<Boolean> itemsTruth) {
+    public ChecklistItemAdapter(Context context, ArrayList<String> items, ArrayList<Boolean> itemsTruth, Boolean isChecklist) {
         _context = context;
         _items = items;
         _itemsTruth = itemsTruth;
+        _isChecklist = isChecklist;
     }
 
     // Create new views (invoked by the layout manager)
@@ -72,8 +79,16 @@ public class ChecklistItemAdapter extends RecyclerView.Adapter<ChecklistItemAdap
     public ChecklistItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                          int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.check_box, null);
+        View v;
+
+        if(!_isChecklist) {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.check_box, null);
+        }
+        else {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.check_list_detail_view, null);
+        }
         // set the view's size, margins, paddings and layout parameters
 
         ViewHolder vh = new ViewHolder(v);
@@ -97,12 +112,18 @@ public class ChecklistItemAdapter extends RecyclerView.Adapter<ChecklistItemAdap
 //        });
 
         holder.checkBox.setChecked(_itemsTruth.get(position));
-        holder.editText.setText(_items.get(position));
-        if(position == getItemCount()-1 && getItemCount()>1) holder.editText.requestFocus();
-        if(position != 0) holder.editText.setHint(" ");
+        if(!_isChecklist) {
+            holder.editText.setText(_items.get(position));
+            if (position == getItemCount() - 1 && getItemCount() > 1)
+                holder.editText.requestFocus();
+            if (position != 0) holder.editText.setHint(" ");
 //        _imageButton.setOnClickListener();
-        CheckListMenu.listOfEditText.add(holder.editText);
-        CheckListMenu.listOfCheckBox.add(holder.checkBox);
+            CheckListMenu.listOfEditText.add(holder.editText);
+            CheckListMenu.listOfCheckBox.add(holder.checkBox);
+        }
+        else {
+            holder.textView.setText(_items.get(position));
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

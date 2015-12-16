@@ -4,12 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CardDetails extends AppCompatActivity{
 
@@ -41,7 +48,41 @@ public class CardDetails extends AppCompatActivity{
             if(!s.equals("")) {
                 detailsCategory.setText("Category: " + MainActivity._data.get(_position).getCategory());
             }
+            if(MainActivity._data.get(_position).isChecklist()) {
+                RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.checklist_recycler_view);
+                recyclerView.setHasFixedSize(false);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                JSONArray jsonItems = MainActivity._data.get(_position).getItems();
+                JSONArray jsonItemsTruth = MainActivity._data.get(_position).getItemsTruth();
+                ArrayList<String> items = getStringArray(jsonItems);
+                ArrayList<Boolean> itemsTruth = getBoolArray(jsonItemsTruth);
+                ChecklistItemAdapter chAdapter = new ChecklistItemAdapter(this, items, itemsTruth, true);
+                recyclerView.setAdapter(chAdapter);
+            }
         }
+    }
+
+    public ArrayList<String> getStringArray(JSONArray jsonArray){
+        ArrayList<String> arrayList = new ArrayList<>();
+        int length = jsonArray.optJSONArray(0).length();
+        if(jsonArray!=null){
+            for(int i=0;i<length;i++){
+                arrayList.add(jsonArray.optJSONArray(0).optString(i));
+            }
+        }
+        return arrayList;
+    }
+
+    public ArrayList<Boolean> getBoolArray(JSONArray jsonArray){
+        ArrayList<Boolean> arrayList = new ArrayList<>();
+        int length = jsonArray.optJSONArray(0).length();
+        if(jsonArray!=null){
+            for(int i=0;i<length;i++){
+                arrayList.add(jsonArray.optJSONArray(0).optBoolean(i));
+            }
+        }
+        return arrayList;
     }
 
     private void setUpToolbar() {

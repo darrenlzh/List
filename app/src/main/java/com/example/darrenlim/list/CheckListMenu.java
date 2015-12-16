@@ -56,7 +56,7 @@ public class CheckListMenu extends AppCompatActivity implements View.OnClickList
         _recyclerView.setHasFixedSize(false);
         _recyclerView.setLayoutManager(new LinearLayoutManager(this));
         _recyclerView.setItemAnimator(new DefaultItemAnimator());
-        _chAdapter = new ChecklistItemAdapter(this, _items, _itemsTruth);
+        _chAdapter = new ChecklistItemAdapter(this, _items, _itemsTruth, false);
         _recyclerView.setAdapter(_chAdapter);
 
 
