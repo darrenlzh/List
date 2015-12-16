@@ -25,6 +25,8 @@ import com.parse.ParseUser;
 
 import org.json.JSONArray;
 
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -78,6 +80,7 @@ public class CheckListMenu extends AppCompatActivity implements View.OnClickList
         Reminder reminder = new Reminder();
         reminder.setTitle(title);
         reminder.setCategory("");
+        reminder.setUser(ParseUser.getCurrentUser().getUsername());
 
         for(int i=0; i<listOfEditText.size(); i++) {
             String itemString = listOfEditText.get(i).getText().toString();

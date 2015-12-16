@@ -28,13 +28,19 @@ public class CardDetails extends AppCompatActivity{
         if(_isNotification){
             detailsTitle.setText(getIntent().getStringExtra("title"));
             detailsNotes.setText(getIntent().getStringExtra("notes"));
-            detailsCategory.setText("Category: " + getIntent().getStringExtra("category"));
+            String s = getIntent().getStringExtra("category");
+            if(!s.equals("")) {
+                detailsCategory.setText("Category: " + getIntent().getStringExtra("category"));
+            }
         }
         else {
             _position = getIntent().getIntExtra("intPos", 0);
             detailsTitle.setText(MainActivity._data.get(_position).getTitle());
             detailsNotes.setText(MainActivity._data.get(_position).getNotes());
-            detailsCategory.setText("Category: " + MainActivity._data.get(_position).getCategory());
+            String s = MainActivity._data.get(_position).getCategory();
+            if(!s.equals("")) {
+                detailsCategory.setText("Category: " + MainActivity._data.get(_position).getCategory());
+            }
         }
     }
 
