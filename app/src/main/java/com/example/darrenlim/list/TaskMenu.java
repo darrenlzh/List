@@ -52,6 +52,7 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
     private android.support.v7.widget.Toolbar _toolbar;
     private ArrayList<String> _categories;
     private int _priority;
+    private Switch _switch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +61,8 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_task_menu);
         setUpToolbar();
 //        setupCollapsingToolbarLayout();
-        Switch sw = (Switch) findViewById(R.id.reminderSwitch);
-        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        _switch = (Switch) findViewById(R.id.reminderSwitch);
+        _switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 DatePicker dp = (DatePicker) findViewById(R.id.datePicker);
@@ -106,13 +107,6 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
                 }
             }
         });
-
-        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-        AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-        System.out.println("HELLO");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 10*1000, pendingIntent);
-
     }
 
     @Override
@@ -154,6 +148,27 @@ public class TaskMenu extends AppCompatActivity implements View.OnClickListener{
 
         reminder.saveInBackground();
         MainActivity._data.add(0, reminder);
+        if(_switch.isChecked()) {
+            DatePicker dp = (DatePicker) findViewById(R.id.datePicker);
+            TimePicker tp = (TimePicker) findViewById(R.id.timePicker);
+            Calendar cal = MainActivity._calendar;
+            cal.set(Calendar.YEAR, dp.getYear());
+            cal.set(Calendar.MONTH,dp.getMonth());
+            cal.set(Calendar.DAY_OF_MONTH, dp.getDayOfMonth());
+            cal.set(Calendar.HOUR,tp.getHour());
+            cal.set(Calendar.MINUTE, tp.getMinute());
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND,0);
+
+            Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class)
+                    .putExtra("notify", true).putExtra("title", title).putExtra("notes", notes);
+            AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+            System.out.println("HELLO");
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarm.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+            cal.setTimeInMillis(System.currentTimeMillis());
+        }
+
         setResult(MainActivity.RESULT_OK, new Intent());
         finish();
     }

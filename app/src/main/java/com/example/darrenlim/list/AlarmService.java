@@ -22,8 +22,14 @@ public class AlarmService extends Service{
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
+        if(intent == null){
+            return;
+        }
 
-        Intent i = new Intent(getApplicationContext(),MainActivity.class);
+        Intent i = new Intent(getApplicationContext(),CardDetails.class)
+                .putExtra("notify",intent.getBooleanExtra("notify",true))
+                .putExtra("title",intent.getStringExtra("title"))
+                .putExtra("notes",intent.getStringExtra("notes"));
         PendingIntent pI = PendingIntent.getActivity(getApplicationContext(),0,i,PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder n  = new NotificationCompat.Builder(getApplicationContext())
                 .setContentTitle("Reminder")

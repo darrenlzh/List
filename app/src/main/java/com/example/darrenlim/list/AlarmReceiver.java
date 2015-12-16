@@ -12,7 +12,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent i = new Intent(context, AlarmService.class);
+        if(intent == null){
+            return;
+        }
+        Intent i = new Intent(context, AlarmService.class)
+                .putExtra("notify", intent.getBooleanExtra("notify", true))
+                .putExtra("title", intent.getStringExtra("title"))
+                .putExtra("notes",intent.getStringExtra("notes"));
         context.startService(i);
     }
 }
