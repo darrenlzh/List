@@ -3,9 +3,12 @@ package com.example.darrenlim.list;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
-import java.io.Serializable;
+import org.json.JSONArray;
 
-    @ParseClassName("ReminderObj")
+import java.io.Serializable;
+import java.util.ArrayList;
+
+@ParseClassName("ReminderObj")
 public class Reminder extends ParseObject implements Serializable{
 
     public Reminder() {
@@ -57,5 +60,17 @@ public class Reminder extends ParseObject implements Serializable{
     public void setCategory(String category) {put("category",category);}
 
     public String getCategory() { return getString("category");}
+
+        public JSONArray getItems() { return getJSONArray("items"); }
+
+    public void setItems(JSONArray items) { put("items", items); }
+
+    public JSONArray getItemsTruth() { return getJSONArray("itemsTruth"); }
+
+    public void setItemsTruth(JSONArray itemsTruth) { put("itemsTruth", itemsTruth); }
+
+    public Boolean isChecklist() { return getBoolean("isChecklist"); }
+
+    public void setIsChecklist(Boolean isChecklist) { put("isChecklist", isChecklist); }
 
 }

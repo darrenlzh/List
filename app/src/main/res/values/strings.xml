@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">List</string>
+    <string name="app_name">Token</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_task_menu">TaskMenu</string>
     <string name="title_activity_check_list_menu">CheckList</string>

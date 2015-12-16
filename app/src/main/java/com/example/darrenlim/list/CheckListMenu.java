@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,7 +21,12 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.parse.ParseUser;
+
+import org.json.JSONArray;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by darrenlim on 12/15/15.
@@ -32,6 +38,8 @@ public class CheckListMenu extends AppCompatActivity implements View.OnClickList
     private ChecklistItemAdapter _chAdapter;
     private ArrayList<String> _items = new ArrayList<>();
     private ArrayList<Boolean> _itemsTruth = new ArrayList<>();
+    public static ArrayList<EditText> listOfEditText = new ArrayList<>();
+    public static ArrayList<CheckBox> listOfCheckBox = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,7 @@ public class CheckListMenu extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_check_list_menu);
         setUpToolbar();
 
+        _items.clear(); _itemsTruth.clear(); listOfEditText.clear(); listOfCheckBox.clear();
         _items.add("");
         _itemsTruth.add(false);
         _recyclerView = (RecyclerView) this.findViewById(R.id.checklist_recycler_view);
@@ -70,6 +79,22 @@ public class CheckListMenu extends AppCompatActivity implements View.OnClickList
         reminder.setTitle(title);
         reminder.setCategory("");
 
+        for(int i=0; i<listOfEditText.size(); i++) {
+            String itemString = listOfEditText.get(i).getText().toString();
+            _items.set(i, itemString);
+        }
+
+        for(int i=0; i<listOfCheckBox.size(); i++) {
+            Boolean itemBool = listOfCheckBox.get(i).isChecked();
+            _itemsTruth.set(i, itemBool);
+        }
+
+        JSONArray items = new JSONArray(Arrays.asList(_items));
+        JSONArray itemsTruth = new JSONArray(Arrays.asList(_itemsTruth));
+        reminder.setItems(items);
+        reminder.setItemsTruth(itemsTruth);
+        reminder.setIsChecklist(true);
+        reminder.setUser(ParseUser.getCurrentUser().getUsername());
         reminder.saveInBackground();
         MainActivity._data.add(0, reminder);
 
@@ -113,6 +138,8 @@ public class CheckListMenu extends AppCompatActivity implements View.OnClickList
         _items.remove(position);
         _itemsTruth.remove(position);
         _chAdapter.notifyItemRemoved(position);
+        listOfEditText.remove(position);
+        listOfCheckBox.remove(position);
     }
 
 }
