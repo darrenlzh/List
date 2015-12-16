@@ -68,6 +68,7 @@ public class CheckListMenu extends AppCompatActivity implements View.OnClickList
 
         Reminder reminder = new Reminder();
         reminder.setTitle(title);
+        reminder.setCategory("");
 
         reminder.saveInBackground();
         MainActivity._data.add(0, reminder);
