@@ -98,7 +98,7 @@ public class ChecklistItemAdapter extends RecyclerView.Adapter<ChecklistItemAdap
 
         holder.checkBox.setChecked(_itemsTruth.get(position));
         holder.editText.setText(_items.get(position));
-        if(position == getItemCount()-1) holder.editText.requestFocus();
+        if(position == getItemCount()-1 && getItemCount()>1) holder.editText.requestFocus();
         if(position != 0) holder.editText.setHint(" ");
 //        _imageButton.setOnClickListener();
     }

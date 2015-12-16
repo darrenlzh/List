@@ -12,17 +12,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 /**
  * Created by darrenlim on 12/15/15.
  */
-public class CheckListMenu extends AppCompatActivity {
+public class CheckListMenu extends AppCompatActivity implements View.OnClickListener{
 
     private Toolbar _toolbar;
     private RecyclerView _recyclerView;
@@ -45,6 +48,32 @@ public class CheckListMenu extends AppCompatActivity {
         _chAdapter = new ChecklistItemAdapter(this, _items, _itemsTruth);
         _recyclerView.setAdapter(_chAdapter);
 
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        String title;
+        EditText text = (EditText) findViewById(R.id.checklist_title);
+        title = text.getText().toString();
+        if(title.equals("")) {
+            Toast.makeText(CheckListMenu.this, R.string.noTitleError, Toast.LENGTH_LONG).show();
+            ScrollView scrollView = (ScrollView) findViewById(R.id.checklist_scrollview);
+            scrollView.smoothScrollTo(0,0);
+            text.setFocusableInTouchMode(true);
+            text.requestFocus();
+            return;
+        }
+
+        Reminder reminder = new Reminder();
+        reminder.setTitle(title);
+
+        reminder.saveInBackground();
+        MainActivity._data.add(0, reminder);
+
+        setResult(MainActivity.RESULT_OK, new Intent());
+        finish();
 
     }
 
@@ -84,4 +113,5 @@ public class CheckListMenu extends AppCompatActivity {
         _itemsTruth.remove(position);
         _chAdapter.notifyItemRemoved(position);
     }
+
 }

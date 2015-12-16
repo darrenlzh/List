@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:fitsSystemWindows="true"
-    tools:context="com.example.list.TaskMenu">
+    tools:context="com.example.list.CheckListMenu">
 
     <android.support.design.widget.AppBarLayout android:layout_height="56dp"
         android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay"
@@ -12,7 +12,17 @@
 
         <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
             android:layout_width="match_parent" android:layout_height="@dimen/toolbar_overlay"
-            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Done"
+                android:onClick="onClick"
+                android:background="@android:color/transparent"
+                android:layout_gravity="end"/>
+
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
