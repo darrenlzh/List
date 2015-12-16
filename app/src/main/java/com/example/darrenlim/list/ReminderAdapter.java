@@ -70,7 +70,6 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHo
         // - replace the contents of the view with that element
         final int pos = position;
         holder.textView.setText(_data.get(position).getTitle());
-//        holder.cardView.setTag(position);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

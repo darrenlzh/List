@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/checkbox_container">
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/check_box"
+        android:layout_centerVertical="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/check_box"
+        android:hint="Add something"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:id="@+id/check_text"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_black_24dp"
+        android:id="@+id/add_item_button"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/transparent"
+        android:layout_centerVertical="true"
+        android:onClick="onAddChecklistItem"/>
+
+</RelativeLayout>
