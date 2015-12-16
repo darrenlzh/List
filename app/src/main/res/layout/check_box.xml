@@ -28,6 +28,7 @@
         android:layout_alignParentEnd="true"
         android:background="@android:color/transparent"
         android:layout_centerVertical="true"
-        android:onClick="onAddChecklistItem"/>
+        android:onClick="onAddChecklistItem"
+        android:tint="@color/colorAccent"/>
 
 </RelativeLayout>

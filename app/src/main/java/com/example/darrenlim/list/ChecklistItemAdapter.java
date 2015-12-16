@@ -54,6 +54,10 @@ public class ChecklistItemAdapter extends RecyclerView.Adapter<ChecklistItemAdap
 //            });
 
         }
+
+        public int myGetPosition() {
+            return getAdapterPosition();
+        }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -106,8 +110,8 @@ public class ChecklistItemAdapter extends RecyclerView.Adapter<ChecklistItemAdap
 
     public void updateChecklistAdapter(){
 
-
 //        _imageButton.setVisibility(View.GONE);
 //        _editText.requestFocus();
     }
+
 }

@@ -65,9 +65,23 @@ public class CheckListMenu extends AppCompatActivity {
     }
 
     public void onAddChecklistItem(View v) {
+        ImageButton imageButton = (ImageButton) v.findViewById(R.id.add_item_button);
+        imageButton.setImageResource(R.drawable.ic_remove_black_24dp);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                delete(_recyclerView.getChildAdapterPosition());
+            }
+        });
         _items.add("");
         _itemsTruth.add(false);
         _chAdapter.updateChecklistAdapter();
         _chAdapter.notifyItemInserted(_items.size()-1);
+    }
+
+    public void delete(int position) {
+        _items.remove(position);
+        _itemsTruth.remove(position);
+        _chAdapter.notifyItemRemoved(position);
     }
 }

@@ -210,7 +210,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                                         deleteCategoryFromCloud(category);
                                     }
                                 }
-                                _rAdapter.notifyDataSetChanged();
                             }
 
                             @Override
@@ -227,7 +226,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                                         deleteCategoryFromCloud(category);
                                     }
                                 }
-                                _rAdapter.notifyDataSetChanged();
                             }
                         });
 
