@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.List;
 public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHolder> {
     private ArrayList<Reminder> _data;
     private static Context _context;
+    private Boolean _isChecklist;
 
             // Provide a reference to the views for each data item
             // Complex data items may need more than one view per item, and
@@ -28,11 +32,13 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHo
         // each data item is just a string in this case
         public TextView textView;
         public CardView cardView;
+        public TextView detailTextView;
         public ViewHolder(View v) {
             super(v);
             _context = v.getContext();
             cardView = (CardView) v.findViewById(R.id.card_v);
             textView = (TextView) v.findViewById(R.id.info_title);
+            detailTextView = (TextView) v.findViewById(R.id.text_details);
 //            cardView.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -68,8 +74,25 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        _isChecklist =  _data.get(position).isChecklist();
         final int pos = position;
         holder.textView.setText(_data.get(position).getTitle());
+        if(_isChecklist) {
+            String itemsText = "";
+            JSONArray jsonArray = _data.get(position).getItems();
+            ArrayList<String> arrayList = new ArrayList<>();
+            int length = jsonArray.optJSONArray(0).length();
+            if(jsonArray!=null){
+                for(int i=0;i<length;i++){
+                    arrayList.add(jsonArray.optJSONArray(0).optString(i));
+                }
+            }
+            for(int i=0; i<arrayList.size(); i++) {
+                itemsText += "- " + arrayList.get(i) + "\n";
+            }
+            holder.detailTextView.setText(itemsText);
+        }
+        else holder.detailTextView.setVisibility(View.GONE);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

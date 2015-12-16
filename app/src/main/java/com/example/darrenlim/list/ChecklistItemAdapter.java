@@ -123,6 +123,7 @@ public class ChecklistItemAdapter extends RecyclerView.Adapter<ChecklistItemAdap
         }
         else {
             holder.textView.setText(_items.get(position));
+            CardDetails.listOfCheckBox.add(holder.checkBox);
         }
     }
 
