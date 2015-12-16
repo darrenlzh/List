@@ -100,6 +100,7 @@ public class ChecklistItemAdapter extends RecyclerView.Adapter<ChecklistItemAdap
         holder.editText.setText(_items.get(position));
         if(position == getItemCount()-1) holder.editText.requestFocus();
         if(position != 0) holder.editText.setHint(" ");
+        _imageButton.setOnClickListener();
     }
 
     // Return the size of your dataset (invoked by the layout manager)

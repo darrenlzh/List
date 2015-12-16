@@ -70,7 +70,7 @@ public class CheckListMenu extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                delete(_recyclerView.getChildAdapterPosition());
+                delete(_recyclerView.getChildAdapterPosition((View)v.getParent()));
             }
         });
         _items.add("");
